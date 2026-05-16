@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Urk Blah – Orcish Translator</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=IM+Fell+English:ital@0;1&family=Uncial+Antiqua&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Uncial+Antiqua&display=swap" rel="stylesheet">
 <style>
   :root {
     --blood:    #8b1a1a;
@@ -15,7 +15,6 @@
     --parchment:#f0e6c8;
     --parch2:   #e0d0a8;
     --ink:      #1a1208;
-    --stone:    #3a3028;
     --gold:     #b8860b;
     --shadow:   rgba(0,0,0,0.55);
   }
@@ -28,34 +27,20 @@
       radial-gradient(ellipse 80% 60% at 50% 0%, #2a1505 0%, transparent 70%),
       url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E");
     min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    display: flex; flex-direction: column; align-items: center;
     padding: 2rem 1rem 4rem;
     font-family: 'IM Fell English', Georgia, serif;
     color: var(--parchment);
   }
 
-  /* ── HEADER ── */
-  header {
-    text-align: center;
-    margin-bottom: 2.5rem;
-    position: relative;
-  }
+  header { text-align: center; margin-bottom: 2.5rem; }
 
   .skull-divider {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    justify-content: center;
-    margin: 0.4rem 0;
+    display: flex; align-items: center; gap: 1rem;
+    justify-content: center; margin: 0.4rem 0;
   }
-  .skull-divider::before,
-  .skull-divider::after {
-    content: '';
-    flex: 1;
-    max-width: 180px;
-    height: 2px;
+  .skull-divider::before, .skull-divider::after {
+    content: ''; flex: 1; max-width: 180px; height: 2px;
     background: linear-gradient(to right, transparent, var(--blood), var(--rust));
   }
   .skull-divider::after {
@@ -64,158 +49,88 @@
   .skull-icon { font-size: 1.4rem; filter: drop-shadow(0 0 6px var(--blood)); }
 
   h1 {
-    font-family: 'Uncial Antiqua', 'MedievalSharp', serif;
+    font-family: 'Uncial Antiqua', serif;
     font-size: clamp(2.4rem, 6vw, 4rem);
     color: var(--amber);
     text-shadow: 0 0 30px var(--blood2), 2px 2px 0 var(--blood2), 0 2px 16px var(--blood);
-    letter-spacing: 0.06em;
-    line-height: 1.1;
+    letter-spacing: 0.06em; line-height: 1.1;
   }
-
   .subtitle {
-    font-style: italic;
-    color: var(--parch2);
-    font-size: 1.05rem;
-    opacity: 0.85;
-    margin-top: 0.3rem;
+    font-style: italic; color: var(--parch2);
+    font-size: 1.05rem; opacity: 0.85; margin-top: 0.3rem;
   }
 
-  /* ── MAIN CARD ── */
+  /* CARD */
   .card {
     background: var(--parchment);
-    background-image:
-      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
-    color: var(--ink);
-    border-radius: 4px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
+    color: var(--ink); border-radius: 4px;
     border: 3px solid var(--blood);
     box-shadow: 0 0 0 6px var(--blood2), 0 8px 40px var(--shadow), inset 0 0 60px rgba(139,90,43,0.12);
-    padding: 2rem 2.2rem;
-    width: 100%;
-    max-width: 780px;
-    position: relative;
+    padding: 2rem 2.2rem; width: 100%; max-width: 840px; position: relative;
   }
-
-  /* corner ornaments */
   .card::before, .card::after {
-    content: '✦';
-    position: absolute;
-    color: var(--blood);
-    font-size: 1.2rem;
-    top: 8px;
+    content: '✦'; position: absolute; color: var(--blood); font-size: 1.2rem; top: 8px;
   }
-  .card::before { left: 12px; }
-  .card::after  { right: 12px; }
+  .card::before { left: 12px; } .card::after { right: 12px; }
 
-  /* ── DIRECTION TOGGLE ── */
+  /* DIRECTION TOGGLE */
   .dir-toggle {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0;
-    margin-bottom: 1.6rem;
-    border: 2px solid var(--blood);
-    border-radius: 3px;
-    overflow: hidden;
-    width: fit-content;
-    margin-inline: auto;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 1.6rem; border: 2px solid var(--blood); border-radius: 3px;
+    overflow: hidden; width: fit-content; margin-inline: auto;
   }
-
   .dir-toggle button {
-    background: transparent;
-    border: none;
-    padding: 0.5rem 1.4rem;
-    font-family: 'IM Fell English', serif;
-    font-size: 0.95rem;
-    cursor: pointer;
-    color: var(--blood2);
+    background: transparent; border: none; padding: 0.5rem 1.4rem;
+    font-family: 'IM Fell English', serif; font-size: 0.95rem;
+    cursor: pointer; color: var(--blood2);
     transition: background 0.2s, color 0.2s;
-    font-weight: bold;
-    letter-spacing: 0.04em;
+    font-weight: bold; letter-spacing: 0.04em;
   }
-  .dir-toggle button.active {
-    background: var(--blood);
-    color: var(--parchment);
-  }
+  .dir-toggle button.active { background: var(--blood); color: var(--parchment); }
   .dir-toggle .arrow-btn {
     background: var(--parch2);
-    border-left: 2px solid var(--blood);
-    border-right: 2px solid var(--blood);
-    color: var(--blood);
-    font-size: 1.1rem;
-    padding: 0.5rem 0.9rem;
-    cursor: pointer;
-    border-top: none;
-    border-bottom: none;
-    transition: background 0.2s;
+    border-left: 2px solid var(--blood); border-right: 2px solid var(--blood);
+    color: var(--blood); font-size: 1.1rem; padding: 0.5rem 0.9rem;
+    cursor: pointer; border-top: none; border-bottom: none; transition: background 0.2s;
   }
   .dir-toggle .arrow-btn:hover { background: var(--blood); color: var(--parchment); }
 
-  /* ── PANELS ── */
-  .panels {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.2rem;
-    margin-bottom: 1.2rem;
-  }
-
+  /* PANELS */
+  .panels { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; margin-bottom: 1.2rem; }
   @media (max-width: 560px) {
     .panels { grid-template-columns: 1fr; }
     .card { padding: 1.4rem 1rem; }
   }
 
   .panel-label {
-    font-family: 'Uncial Antiqua', serif;
-    font-size: 0.8rem;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    color: var(--blood);
-    margin-bottom: 0.4rem;
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
+    font-family: 'Uncial Antiqua', serif; font-size: 0.8rem;
+    text-transform: uppercase; letter-spacing: 0.12em;
+    color: var(--blood); margin-bottom: 0.4rem;
   }
-
   textarea {
-    width: 100%;
-    min-height: 140px;
-    background: #fdf7e8;
-    border: 2px solid var(--gold);
-    border-radius: 3px;
-    padding: 0.8rem;
-    font-family: 'IM Fell English', Georgia, serif;
-    font-size: 1.05rem;
-    color: var(--ink);
-    resize: vertical;
-    line-height: 1.6;
+    width: 100%; min-height: 140px; background: #fdf7e8;
+    border: 2px solid var(--gold); border-radius: 3px; padding: 0.8rem;
+    font-family: 'IM Fell English', Georgia, serif; font-size: 1.05rem;
+    color: var(--ink); resize: vertical; line-height: 1.6;
     transition: border-color 0.2s, box-shadow 0.2s;
     box-shadow: inset 0 1px 6px rgba(139,90,43,0.1);
   }
   textarea:focus {
-    outline: none;
-    border-color: var(--blood);
+    outline: none; border-color: var(--blood);
     box-shadow: 0 0 0 3px rgba(139,26,26,0.18), inset 0 1px 6px rgba(139,90,43,0.1);
   }
   textarea[readonly] {
-    background: #f5edd8;
-    cursor: default;
-    color: var(--blood2);
-    font-weight: bold;
+    background: #f5edd8; cursor: default;
+    color: var(--blood2); font-weight: bold;
   }
 
-  /* ── TRANSLATE BTN ── */
   .translate-btn {
-    display: block;
-    width: 100%;
-    padding: 0.75rem;
+    display: block; width: 100%; padding: 0.75rem;
     background: linear-gradient(180deg, var(--blood) 0%, var(--blood2) 100%);
-    color: var(--parchment);
-    border: 2px solid var(--blood2);
-    border-radius: 3px;
-    font-family: 'Uncial Antiqua', serif;
-    font-size: 1.15rem;
-    letter-spacing: 0.1em;
-    cursor: pointer;
-    margin-bottom: 1.4rem;
+    color: var(--parchment); border: 2px solid var(--blood2); border-radius: 3px;
+    font-family: 'Uncial Antiqua', serif; font-size: 1.15rem; letter-spacing: 0.1em;
+    cursor: pointer; margin-bottom: 1.4rem;
     box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     transition: filter 0.15s, transform 0.1s;
     text-shadow: 1px 1px 2px var(--blood2);
@@ -223,130 +138,75 @@
   .translate-btn:hover { filter: brightness(1.15); }
   .translate-btn:active { transform: translateY(1px); filter: brightness(0.9); }
 
-  /* ── TIPS BOX ── */
-  .tips {
-    background: #f8f0d8;
-    border-left: 4px solid var(--rust);
+  /* TIPS */
+  details { margin-bottom: 1.2rem; }
+  details summary {
+    cursor: pointer; font-family: 'Uncial Antiqua', serif; font-size: 0.9rem;
+    letter-spacing: 0.07em; color: var(--blood); user-select: none;
+    list-style: none; display: flex; align-items: center; gap: 0.5rem;
+  }
+  details summary::-webkit-details-marker { display: none; }
+
+  .tips-box {
+    background: #f8f0d8; border-left: 4px solid var(--rust);
     border-radius: 0 3px 3px 0;
-    padding: 0.9rem 1rem;
-    font-size: 0.92rem;
-    color: #3a2808;
-    line-height: 1.7;
-    margin-bottom: 1.4rem;
+    padding: 0.9rem 1rem; font-size: 0.92rem;
+    color: #3a2808; line-height: 1.7; margin-top: 0.6rem;
   }
-  .tips strong { color: var(--blood2); }
-  .tips summary {
-    cursor: pointer;
-    font-family: 'Uncial Antiqua', serif;
-    font-size: 0.9rem;
-    letter-spacing: 0.06em;
-    color: var(--blood);
-    list-style: none;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    user-select: none;
-  }
-  .tips summary::before { content: '⚔'; }
-  details[open] summary::before { content: '🩸'; }
-  .tips ul { margin: 0.6rem 0 0 1.1rem; }
-  .tips li { margin-bottom: 0.25rem; }
+  .tips-box strong { color: var(--blood2); }
+  .tips-box ul { margin: 0 0 0 1.1rem; }
+  .tips-box li { margin-bottom: 0.28rem; }
 
-  /* ── DICTIONARY ── */
-  .dict-section summary {
-    cursor: pointer;
-    font-family: 'Uncial Antiqua', serif;
-    font-size: 0.92rem;
-    letter-spacing: 0.07em;
-    color: var(--blood);
-    user-select: none;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 0.5rem;
-    list-style: none;
-  }
-  .dict-section summary::before { content: '📜'; }
-
+  /* DICT */
+  .dict-inner { margin-top: 0.6rem; }
   .dict-filter {
-    width: 100%;
-    padding: 0.45rem 0.7rem;
-    border: 1.5px solid var(--gold);
-    border-radius: 3px;
-    font-family: 'IM Fell English', serif;
-    font-size: 0.95rem;
-    margin-bottom: 0.8rem;
-    background: #fdf7e8;
-    color: var(--ink);
+    width: 100%; padding: 0.45rem 0.7rem;
+    border: 1.5px solid var(--gold); border-radius: 3px;
+    font-family: 'IM Fell English', serif; font-size: 0.95rem;
+    margin-bottom: 0.8rem; background: #fdf7e8; color: var(--ink);
   }
   .dict-filter:focus { outline: none; border-color: var(--blood); }
 
-  .dict-cats {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.4rem;
-    margin-bottom: 0.7rem;
-  }
+  .dict-cats { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.7rem; }
   .cat-btn {
-    padding: 0.2rem 0.7rem;
-    border: 1.5px solid var(--blood);
-    border-radius: 2px;
-    background: transparent;
-    color: var(--blood2);
-    font-family: 'IM Fell English', serif;
-    font-size: 0.8rem;
-    cursor: pointer;
-    transition: background 0.15s, color 0.15s;
+    padding: 0.2rem 0.75rem; border: 1.5px solid var(--blood);
+    border-radius: 2px; background: transparent; color: var(--blood2);
+    font-family: 'IM Fell English', serif; font-size: 0.82rem;
+    cursor: pointer; transition: background 0.15s, color 0.15s;
   }
   .cat-btn.active, .cat-btn:hover { background: var(--blood); color: var(--parchment); }
 
   .dict-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 0.35rem 1rem;
-    max-height: 340px;
-    overflow-y: auto;
-    padding-right: 4px;
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 0.3rem 1.2rem; max-height: 360px; overflow-y: auto; padding-right: 4px;
   }
   .dict-grid::-webkit-scrollbar { width: 6px; }
   .dict-grid::-webkit-scrollbar-track { background: var(--parch2); }
   .dict-grid::-webkit-scrollbar-thumb { background: var(--blood); border-radius: 3px; }
 
   .dict-row {
-    display: flex;
-    align-items: baseline;
-    gap: 0.4rem;
-    font-size: 0.88rem;
-    line-height: 1.5;
-    padding: 0.1rem 0;
+    display: flex; align-items: baseline; gap: 0.4rem;
+    font-size: 0.88rem; line-height: 1.5; padding: 0.12rem 4px;
     border-bottom: 1px dotted #c8b888;
-    cursor: pointer;
-    transition: background 0.1s;
-    border-radius: 2px;
-    padding-inline: 4px;
+    cursor: pointer; transition: background 0.1s; border-radius: 2px;
   }
-  .dict-row:hover { background: rgba(139,26,26,0.08); }
-  .dict-eng { color: var(--ink); flex: 1; }
-  .dict-sep { color: var(--rust); }
+  .dict-row:hover { background: rgba(139,26,26,0.09); }
+  .dict-eng { color: var(--ink); flex: 1.1; }
+  .dict-sep { color: var(--rust); flex-shrink: 0; }
   .dict-orc { color: var(--blood2); font-weight: bold; font-style: italic; flex: 1; }
-  .dict-cat-tag { font-size: 0.7rem; color: #888; }
 
-  /* copy flash */
   @keyframes flashCopy {
-    0%   { background: rgba(139,26,26,0.25); }
+    0%   { background: rgba(139,26,26,0.28); }
     100% { background: transparent; }
   }
-  .dict-row.copied { animation: flashCopy 0.4s ease-out; }
+  .dict-row.copied { animation: flashCopy 0.45s ease-out; }
 
-  /* ── FOOTER ── */
+  .empty-msg { color: #999; font-style: italic; padding: 0.5rem; }
+
+  /* FOOTER */
   footer {
-    margin-top: 2rem;
-    font-style: italic;
-    font-size: 0.82rem;
-    color: #7a6a50;
-    text-align: center;
-    max-width: 600px;
-    line-height: 1.7;
+    margin-top: 2rem; font-style: italic; font-size: 0.82rem;
+    color: #7a6a50; text-align: center; max-width: 620px; line-height: 1.8;
   }
   footer a { color: var(--amber); text-decoration: none; }
   footer a:hover { text-decoration: underline; }
@@ -357,7 +217,7 @@
 <header>
   <div class="skull-divider"><span class="skull-icon">💀</span></div>
   <h1>URK BLAH</h1>
-  <p class="subtitle">Orcish ↔ Common Tongue Translator &nbsp;·&nbsp; UO Outlands / Bloodclan Dialect</p>
+  <p class="subtitle">Orcish ↔ Common Tongue Translator &nbsp;·&nbsp; Bloodclan / UO Outlands Dialect</p>
   <div class="skull-divider"><span class="skull-icon">⚔️</span></div>
 </header>
 
@@ -372,7 +232,7 @@
   <div class="panels">
     <div>
       <div class="panel-label" id="label-in">✦ Common Tongue</div>
-      <textarea id="input-text" placeholder="Type yer words here, oomie..." oninput="liveTranslate()"></textarea>
+      <textarea id="input-text" placeholder="Type yer words here, oomie…" oninput="liveTranslate()"></textarea>
     </div>
     <div>
       <div class="panel-label" id="label-out">✦ Orcish (Urk Blah)</div>
@@ -380,267 +240,290 @@
     </div>
   </div>
 
-  <button class="translate-btn" onclick="doTranslate()">⚔ BLAH IT ⚔</button>
+  <button class="translate-btn" onclick="doTranslate()">⚔ &nbsp;BLAH IT&nbsp; ⚔</button>
 
-  <details class="tips" open>
-    <summary>Speaking Like an Orc – Tips</summary>
-    <ul>
-      <li>Never say <strong>I</strong> — use <strong>me</strong> (or <em>ee / meeb</em>)</li>
-      <li>Drop proper grammar. Speak broken, blunt, angry.</li>
-      <li>Swap <strong>-er</strong> endings → <strong>'r</strong> &nbsp;(runner = run'r)</li>
-      <li>Swap <strong>-ing</strong> endings → <strong>'n</strong> &nbsp;(chopping = chop'n)</li>
-      <li>Spell words how dey sound: "da", "dem", "dat", "der", "dis"</li>
-      <li>Laughter is always <strong>Har har!</strong> — never LOL/ROFL</li>
-      <li>Orcs barely count past five. Five is <em>h</em>, ten is <em>hh</em>.</li>
-      <li>Unfamiliar words? Just butcher 'em. Dat's Orcish.</li>
-    </ul>
+  <details open>
+    <summary>⚔ &nbsp;Speaking Like an Ork – Rules &amp; Tips</summary>
+    <div class="tips-box">
+      <ul>
+        <li>Never say <strong>I</strong> — use <strong>Meeb</strong> or your orc name</li>
+        <li>Never say <strong>you</strong> — use <strong>Lat</strong> (one ork) or <strong>Latz</strong> (many)</li>
+        <li>Use proper punctuation and capitalise where it makes sense</li>
+        <li>Weapon-wielder suffix: add <strong>ur</strong> to weapon name &nbsp;(Lusk → Luskur, Womp → Wompur)</li>
+        <li>Swap <strong>-ing</strong> → <strong>'n</strong> &nbsp;(chopping = chop'n) &nbsp;·&nbsp; <strong>-er</strong> → <strong>ur</strong></li>
+        <li>Speak broken, blunt, and angry — orcs hate wasting words</li>
+        <li>Party / guild chat is called <strong>Zuul Lynk</strong></li>
+        <li>Laughter is always <strong>Har har!</strong> — never LOL or ROFL</li>
+        <li>Unfamiliar words? Just butcher 'em and move on. Dat's Orcish.</li>
+      </ul>
+    </div>
   </details>
 
-  <details class="dict-section">
-    <summary>Full Dictionary (click a word to copy the Orcish)</summary>
-    <input class="dict-filter" id="dict-search" type="text" placeholder="Search words…" oninput="renderDict()">
-    <div class="dict-cats" id="cat-buttons"></div>
-    <div class="dict-grid" id="dict-grid"></div>
+  <details>
+    <summary>📜 &nbsp;Full Dictionary — click any entry to copy the Orcish word</summary>
+    <div class="dict-inner">
+      <input class="dict-filter" id="dict-search" type="text" placeholder="Search English or Orcish…" oninput="renderDict()">
+      <div class="dict-cats" id="cat-buttons"></div>
+      <div class="dict-grid" id="dict-grid"></div>
+    </div>
   </details>
 
 </div>
 
 <footer>
-  Words drawn from <a href="https://www.bloodclan.org/wiki/uo/info/language" target="_blank">Bloodclan Orcs</a>,
-  Shadowclan dialect, Bur'Gar's original script, and UO orc-RP tradition.<br>
-  Hosted on GitHub Pages. <em>Waaagh!</em>
+  Language sourced directly from the
+  <a href="https://www.bloodclan.org/wiki/uo/info/language" target="_blank">Bloodclan Orcs – Language Guide</a>
+  (UO Outlands branch).<br>
+  Hosted on GitHub Pages &nbsp;·&nbsp; <em>Hoowah!</em>
 </footer>
 
 <script>
-// ═══════════════════════════════════════════════════════
-// DICTIONARY — English → Orcish
-// Categories: greeting, combat, identity, nature, items, numbers, magic, social, body, misc
-// ═══════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════════════
+//  DICTIONARY — canonical Bloodclan source, all sections
+//  Categories: general | battle | crafting | numbers | weapons | elements | creatures
+// ══════════════════════════════════════════════════════════════════
 const DICT = [
-  // GREETINGS / SOCIAL
-  { en: 'hello / hail',    orc: 'ug',        cat: 'greeting' },
-  { en: 'hi',              orc: 'hullo',      cat: 'greeting' },
-  { en: 'goodbye',         orc: "gug'ye",     cat: 'greeting' },
-  { en: 'greetings',       orc: 'greebas',    cat: 'greeting' },
-  { en: 'yes',             orc: 'yub',        cat: 'greeting' },
-  { en: 'no',              orc: 'nub',        cat: 'greeting' },
-  { en: 'thanks',          orc: 'rulg',       cat: 'greeting' },
-  { en: 'thank you',       orc: 'dabu',       cat: 'greeting' },
-  { en: 'please',          orc: 'pleez',      cat: 'greeting' },
-  { en: 'come',            orc: 'kum',        cat: 'greeting' },
-  { en: 'go',              orc: 'go',         cat: 'greeting' },
-  { en: 'stop',            orc: 'stup',       cat: 'greeting' },
-  { en: 'wait',            orc: 'wayt',       cat: 'greeting' },
-  { en: 'help',            orc: 'helup',      cat: 'greeting' },
-  { en: 'run',             orc: 'roon',       cat: 'greeting' },
-  { en: 'follow',          orc: 'follo',      cat: 'greeting' },
-  // IDENTITY / PEOPLE
-  { en: 'i / me',          orc: 'me',         cat: 'identity' },
-  { en: 'my / mine',       orc: 'eem',        cat: 'identity' },
-  { en: 'you',             orc: 'lat',        cat: 'identity' },
-  { en: 'your',            orc: "lat'z",      cat: 'identity' },
-  { en: 'we / us',         orc: 'us',         cat: 'identity' },
-  { en: 'they / them',     orc: 'dem',        cat: 'identity' },
-  { en: 'orc (male)',      orc: 'urk',        cat: 'identity' },
-  { en: 'orc (female)',    orc: 'feurk',      cat: 'identity' },
-  { en: 'orc elder',       orc: 'nob',        cat: 'identity' },
-  { en: 'orc grunt',       orc: 'grunt',      cat: 'identity' },
-  { en: 'orc pup / new',   orc: 'gruntee',    cat: 'identity' },
-  { en: 'human / person',  orc: 'oomie',      cat: 'identity' },
-  { en: 'human (man)',     orc: 'shara',      cat: 'identity' },
-  { en: 'human (woman)',   orc: 'sharlob',    cat: 'identity' },
-  { en: 'slave',           orc: 'snaga',      cat: 'identity' },
-  { en: 'fool / idiot',    orc: 'glob',       cat: 'identity' },
-  { en: 'coward',          orc: 'bub-hosh',   cat: 'identity' },
-  { en: 'friend',          orc: 'bruddah',    cat: 'identity' },
-  { en: 'enemy',           orc: 'goth-lat',   cat: 'identity' },
-  { en: 'chief / boss',    orc: 'warboss',    cat: 'identity' },
-  { en: 'lord / master',   orc: 'goth',       cat: 'identity' },
-  { en: 'god / wargod',    orc: 'trugulu',    cat: 'identity' },
-  { en: 'mage / shaman',   orc: 'mojoka',     cat: 'identity' },
-  { en: 'apprentice mage', orc: 'mojokii',    cat: 'identity' },
-  { en: 'crafter / maker', orc: 'makur',      cat: 'identity' },
-  { en: 'thief',           orc: 'fulu',       cat: 'identity' },
-  { en: 'troll',           orc: 'olog',       cat: 'identity' },
-  { en: 'ogre',            orc: 'drangu',     cat: 'identity' },
-  { en: 'ettin / giant',   orc: 'vagun',      cat: 'identity' },
-  { en: 'dragon',          orc: 'kulkodar',   cat: 'identity' },
-  { en: 'ghost',           orc: 'angath',     cat: 'identity' },
-  { en: 'liche',           orc: 'laffur',     cat: 'identity' },
-  // COMBAT
-  { en: 'hit / kill / attack', orc: 'klomp',  cat: 'combat' },
-  { en: 'destroy / slaughter', orc: 'choom',  cat: 'combat' },
-  { en: 'war',             orc: 'trug',       cat: 'combat' },
-  { en: 'battle',          orc: 'klerg',      cat: 'combat' },
-  { en: 'battle lust',     orc: 'klergblud',  cat: 'combat' },
-  { en: 'battlecry',       orc: 'hoowah!',    cat: 'combat' },
-  { en: 'warcry',          orc: 'waaagh!',    cat: 'combat' },
-  { en: 'blood',           orc: 'grish',      cat: 'combat' },
-  { en: 'dead / flat',     orc: 'flat',       cat: 'combat' },
-  { en: 'trap / ambush',   orc: 'krimp',      cat: 'combat' },
-  { en: 'army / warband',  orc: 'rukh',       cat: 'combat' },
-  { en: 'loot / gold',     orc: 'shiniez',    cat: 'combat' },
-  { en: 'loot (blood-pay)',orc: 'bludgelt',   cat: 'combat' },
-  { en: 'tribute',         orc: 'purub',      cat: 'combat' },
-  { en: 'give',            orc: 'gib',        cat: 'combat' },
-  { en: 'treasure',        orc: 'bulag',      cat: 'combat' },
-  // WEAPONS / ARMOR
-  { en: 'axe',             orc: 'lusk',       cat: 'items' },
-  { en: 'scimitar',        orc: 'zult',       cat: 'items' },
-  { en: 'mace',            orc: 'womp',       cat: 'items' },
-  { en: 'dagger',          orc: 'igg',        cat: 'items' },
-  { en: 'spear',           orc: 'kigg',       cat: 'items' },
-  { en: 'kryss',           orc: 'kult',       cat: 'items' },
-  { en: 'bow',             orc: 'olig',       cat: 'items' },
-  { en: 'crossbow',        orc: 'xolig',      cat: 'items' },
-  { en: 'arrow',           orc: 'lig',        cat: 'items' },
-  { en: 'bolt',            orc: 'xligz',      cat: 'items' },
-  { en: 'shield',          orc: "blok'r",     cat: 'items' },
-  { en: 'armor',           orc: 'armur',      cat: 'items' },
-  { en: 'leather',         orc: 'leddurz',    cat: 'items' },
-  { en: 'iron',            orc: 'jarn',       cat: 'items' },
-  { en: 'wood',            orc: 'wuud',       cat: 'items' },
-  { en: 'gold (metal)',    orc: 'rubug',      cat: 'items' },
-  { en: 'gem',             orc: 'kushma',     cat: 'items' },
-  { en: 'rune / guildstone', orc: 'rok',      cat: 'items' },
-  { en: 'bandage / rag',   orc: 'rag',        cat: 'items' },
-  { en: 'potion',          orc: 'mojo wadur', cat: 'items' },
-  { en: 'reagent',         orc: 'weedz',      cat: 'items' },
-  { en: 'food',            orc: 'grub',       cat: 'items' },
-  { en: 'bread',           orc: 'brot',       cat: 'items' },
-  { en: 'meat',            orc: 'fless',      cat: 'items' },
-  { en: 'horse',           orc: 'fuud',       cat: 'items' },
-  // NATURE / ELEMENTS
-  { en: 'fire',            orc: 'ghaash',     cat: 'nature' },
-  { en: 'water',           orc: 'brugh',      cat: 'nature' },
-  { en: 'earth / land',    orc: 'uzg',        cat: 'nature' },
-  { en: 'wind',            orc: 'yula',       cat: 'nature' },
-  { en: 'darkness',        orc: 'burzum',     cat: 'nature' },
-  { en: 'light',           orc: 'juurz',      cat: 'nature' },
-  { en: 'thunder',         orc: 'zgur',       cat: 'nature' },
-  { en: 'ice',             orc: 'akul',       cat: 'nature' },
-  { en: 'acid',            orc: 'kulz',       cat: 'nature' },
-  { en: 'poison',          orc: 'tokshun',    cat: 'nature' },
-  { en: 'mud',             orc: 'balt',       cat: 'nature' },
-  { en: 'snow',            orc: 'bor',        cat: 'nature' },
-  { en: 'tree',            orc: "r'hee",      cat: 'nature' },
-  { en: 'wolf',            orc: 'howlur',     cat: 'nature' },
-  { en: 'bear / pig',      orc: 'buub',       cat: 'nature' },
-  { en: 'bird',            orc: 'zog',        cat: 'nature' },
-  { en: 'spider',          orc: 'takhbork',   cat: 'nature' },
-  { en: 'snake',           orc: 'gajarpan',   cat: 'nature' },
-  { en: 'sheep',           orc: 'bresh',      cat: 'nature' },
-  { en: 'feather',         orc: 'feddurz',    cat: 'nature' },
-  { en: 'wool',            orc: 'wuulz',      cat: 'nature' },
-  // MAGIC / ABILITIES
-  { en: 'magic / power',   orc: 'dush',       cat: 'magic' },
-  { en: 'magic power',     orc: 'gothurz',    cat: 'magic' },
-  { en: 'resurrection',    orc: 'flezhie',    cat: 'magic' },
-  { en: 'curse',           orc: 'skah',       cat: 'magic' },
-  { en: 'speak / say',     orc: 'blah',       cat: 'magic' },
-  { en: 'understand / know', orc: 'gruk',     cat: 'magic' },
-  // NUMBERS
-  { en: 'zero',            orc: 'zuth',       cat: 'numbers' },
-  { en: 'one',             orc: 'ash',        cat: 'numbers' },
-  { en: 'two',             orc: 'dub',        cat: 'numbers' },
-  { en: 'three',           orc: 'gahk',       cat: 'numbers' },
-  { en: 'four',            orc: 'futh',       cat: 'numbers' },
-  { en: 'five',            orc: 'h',          cat: 'numbers' },
-  { en: 'six',             orc: 'hash',       cat: 'numbers' },
-  { en: 'seven',           orc: 'hdub',       cat: 'numbers' },
-  { en: 'eight',           orc: 'h gahk',     cat: 'numbers' },
-  { en: 'nine',            orc: 'hfuth',      cat: 'numbers' },
-  { en: 'ten',             orc: 'hh',         cat: 'numbers' },
-  // DESCRIPTORS
-  { en: 'good',            orc: 'hosh',       cat: 'misc' },
-  { en: 'bad',             orc: 'nubhosh',    cat: 'misc' },
-  { en: 'big',             orc: 'beg',        cat: 'misc' },
-  { en: 'huge',            orc: 'badda',      cat: 'misc' },
-  { en: 'stinking',        orc: 'pushdug',    cat: 'misc' },
-  { en: 'laughing',        orc: 'har har',    cat: 'misc' },
-  { en: 'lol',             orc: 'hoho',       cat: 'misc' },
-  { en: 'here',            orc: 'der',        cat: 'misc' },
-  { en: 'there',           orc: 'der',        cat: 'misc' },
-  { en: 'this',            orc: 'dis',        cat: 'misc' },
-  { en: 'that',            orc: 'dat',        cat: 'misc' },
-  { en: 'the',             orc: 'da',         cat: 'misc' },
-  { en: 'and',             orc: 'agh',        cat: 'misc' },
-  { en: 'with',            orc: 'wif',        cat: 'misc' },
-  { en: 'not / don\'t',    orc: 'nub',        cat: 'misc' },
-  { en: 'now',             orc: 'now',        cat: 'misc' },
-  { en: 'quest / task',    orc: 'kwezt',      cat: 'misc' },
-  { en: 'city / fort',     orc: 'goi',        cat: 'misc' },
-  { en: 'hungry',          orc: "h'gralp",    cat: 'misc' },
-  { en: 'want / need',     orc: 'wan',        cat: 'misc' },
+
+  // ── GENERAL ─────────────────────────────────────────────────────
+  { en: 'hello',                  orc: 'Ug',           cat: 'general' },
+  { en: 'goodbye',                orc: "Gug'ye",        cat: 'general' },
+  { en: 'thanks',                 orc: 'Rulg',          cat: 'general' },
+  { en: 'know / understand',      orc: 'Gruk',          cat: 'general' },
+  { en: 'yes',                    orc: 'Yub',           cat: 'general' },
+  { en: 'no',                     orc: 'Nub',           cat: 'general' },
+  { en: 'magic',                  orc: 'Mojo',          cat: 'general' },
+  { en: 'guildstone / rune',      orc: 'Rok',           cat: 'general' },
+  { en: 'talk / say / words',     orc: 'Blah',          cat: 'general' },
+  { en: 'orc fort',               orc: 'Urkala',        cat: 'general' },
+  { en: 'very good',              orc: 'Bubhosh',       cat: 'general' },
+  { en: 'good / okay',            orc: 'Hosh',          cat: 'general' },
+  { en: 'bad / crap',             orc: 'Nubhosh',       cat: 'general' },
+  { en: 'quest',                  orc: 'Qwezt',         cat: 'general' },
+  { en: 'human',                  orc: 'Oomie',         cat: 'general' },
+  { en: 'bloodclan orc',          orc: 'Ork',           cat: 'general' },
+  { en: 'land',                   orc: 'Uzg',           cat: 'general' },
+  { en: 'you (one)',              orc: 'Lat',           cat: 'general' },
+  { en: 'you (all)',              orc: 'Latz',          cat: 'general' },
+  { en: 'i / me',                 orc: 'Meeb',          cat: 'general' },
+  { en: 'my / mine',              orc: 'Meebz',         cat: 'general' },
+  { en: 'and',                    orc: 'Agh',           cat: 'general' },
+  { en: 'battlecry',              orc: 'Hoowah!',       cat: 'general' },
+  { en: 'kill / attack',          orc: 'Klomp',         cat: 'general' },
+  { en: 'trap / surround',        orc: 'Krimp',         cat: 'general' },
+  { en: 'lord',                   orc: 'Goth',          cat: 'general' },
+  { en: 'resurrection',           orc: 'Flezhie',       cat: 'general' },
+  { en: 'bandage',                orc: 'Rag',           cat: 'general' },
+  { en: 'mount / horse',          orc: 'Fuud',          cat: 'general' },
+  { en: 'slave',                  orc: 'Snaga',         cat: 'general' },
+  { en: 'fool',                   orc: 'Glob',          cat: 'general' },
+  { en: 'stinking',               orc: 'Pushdug',       cat: 'general' },
+  { en: 'party chat',             orc: 'Zuul Lynk',     cat: 'general' },
+  { en: 'path',                   orc: 'Shum',          cat: 'general' },
+
+  // ── BATTLE COMMANDS ─────────────────────────────────────────────
+  { en: 'charge',                 orc: 'Kuj',           cat: 'battle' },
+  { en: 'forward',                orc: 'Fus',           cat: 'battle' },
+  { en: 'back',                   orc: 'Bak',           cat: 'battle' },
+  { en: 'retreat',                orc: 'Rut',           cat: 'battle' },
+  { en: 'hide',                   orc: 'Hyd',           cat: 'battle' },
+  { en: 'outside',                orc: 'Owtzide',       cat: 'battle' },
+  { en: 'inside',                 orc: 'Enzide',        cat: 'battle' },
+  { en: 'defend',                 orc: 'Defenz',        cat: 'battle' },
+
+  // ── CRAFTING ────────────────────────────────────────────────────
+  { en: 'crafter',                orc: "Mak'r",         cat: 'crafting' },
+  { en: 'scissors',               orc: 'Cutturz',       cat: 'crafting' },
+  { en: 'wood / boards / logs',   orc: 'Wuud',          cat: 'crafting' },
+  { en: 'wool',                   orc: 'Wuul',          cat: 'crafting' },
+  { en: 'leathers',               orc: 'Leddurz',       cat: 'crafting' },
+  { en: 'feathers',               orc: 'Feddurz',       cat: 'crafting' },
+  { en: 'reagents',               orc: 'Weedz',         cat: 'crafting' },
+  { en: 'potion',                 orc: 'Mojo Brugh',    cat: 'crafting' },
+
+  // ── NUMBERS ─────────────────────────────────────────────────────
+  { en: 'zero (0)',               orc: 'Zuth',          cat: 'numbers' },
+  { en: 'one (1)',                orc: 'Ash',           cat: 'numbers' },
+  { en: 'two (2)',                orc: 'Dub',           cat: 'numbers' },
+  { en: 'three (3)',              orc: 'Gahk',          cat: 'numbers' },
+  { en: 'four (4)',               orc: 'Futh',          cat: 'numbers' },
+  { en: 'five (5)',               orc: 'H',             cat: 'numbers' },
+  { en: 'six (6)',                orc: 'Hash',          cat: 'numbers' },
+  { en: 'seven (7)',              orc: 'Hdub',          cat: 'numbers' },
+  { en: 'eight (8)',              orc: 'Hgahk',         cat: 'numbers' },
+  { en: 'nine (9)',               orc: 'Hfuth',         cat: 'numbers' },
+  { en: 'ten (10)',               orc: 'HH',            cat: 'numbers' },
+  { en: 'twenty (20)',            orc: 'Dubti',         cat: 'numbers' },
+  { en: 'thirty (30)',            orc: 'Gahkti',        cat: 'numbers' },
+  { en: 'forty (40)',             orc: 'Futhti',        cat: 'numbers' },
+  { en: 'fifty (50)',             orc: 'Hz',            cat: 'numbers' },
+  { en: 'sixty (60)',             orc: 'Hgashi',        cat: 'numbers' },
+  { en: 'seventy (70)',           orc: 'Hdubti',        cat: 'numbers' },
+  { en: 'eighty (80)',            orc: 'Hgahkti',       cat: 'numbers' },
+  { en: 'ninety (90)',            orc: 'Hfuthti',       cat: 'numbers' },
+  { en: 'hundred',               orc: 'Undred',        cat: 'numbers' },
+  { en: 'thousand',              orc: 'Touzand',       cat: 'numbers' },
+  { en: 'million',               orc: 'Milliun',       cat: 'numbers' },
+
+  // ── WEAPONS ─────────────────────────────────────────────────────
+  { en: 'mace',                   orc: 'Womp',          cat: 'weapons' },
+  { en: 'macer',                  orc: 'Wompur',        cat: 'weapons' },
+  { en: 'bow',                    orc: 'Olig',          cat: 'weapons' },
+  { en: 'crossbow',               orc: 'Xolig',         cat: 'weapons' },
+  { en: 'arrow',                  orc: 'Lig',           cat: 'weapons' },
+  { en: 'crossbow bolt',          orc: 'Xlig',          cat: 'weapons' },
+  { en: 'archer',                 orc: 'Oligur',        cat: 'weapons' },
+  { en: 'dagger',                 orc: 'Igg',           cat: 'weapons' },
+  { en: 'kryss',                  orc: 'Kult',          cat: 'weapons' },
+  { en: 'spear',                  orc: 'Kigg',          cat: 'weapons' },
+  { en: 'fencer',                 orc: 'Kiggur',        cat: 'weapons' },
+  { en: 'axe',                    orc: 'Lusk',          cat: 'weapons' },
+  { en: 'axer',                   orc: 'Luskur',        cat: 'weapons' },
+  { en: 'sword',                  orc: 'Zult',          cat: 'weapons' },
+  { en: 'swordsman',              orc: 'Zultur',        cat: 'weapons' },
+  { en: 'shield',                 orc: 'Blokur',        cat: 'weapons' },
+
+  // ── ELEMENTS ────────────────────────────────────────────────────
+  { en: 'power',                  orc: 'Gothurz',       cat: 'elements' },
+  { en: 'blood',                  orc: 'Grish',         cat: 'elements' },
+  { en: 'iron',                   orc: 'Jarn',          cat: 'elements' },
+  { en: 'boards / logs (dru)',    orc: 'Dru',           cat: 'elements' },
+  { en: 'wind',                   orc: 'Yula',          cat: 'elements' },
+  { en: 'water',                  orc: 'Brugh',         cat: 'elements' },
+  { en: 'fire',                   orc: 'Ghaash',        cat: 'elements' },
+  { en: 'earth / land',           orc: 'Uzg',           cat: 'elements' },
+  { en: 'sand',                   orc: 'Uzgii',         cat: 'elements' },
+  { en: 'light',                  orc: 'Juurz',         cat: 'elements' },
+  { en: 'darkness',               orc: 'Burzum',        cat: 'elements' },
+  { en: 'ice',                    orc: 'Akul',          cat: 'elements' },
+  { en: 'thunder',                orc: 'Zgur',          cat: 'elements' },
+  { en: 'mud',                    orc: 'Balt',          cat: 'elements' },
+  { en: 'tree',                   orc: 'Laus',          cat: 'elements' },
+  { en: 'snow',                   orc: 'Bor',           cat: 'elements' },
+  { en: 'poison',                 orc: 'Tokshun',       cat: 'elements' },
+  { en: 'acid',                   orc: 'Kulz',          cat: 'elements' },
+
+  // ── CREATURES ───────────────────────────────────────────────────
+  { en: 'human (oomie)',          orc: 'Oomie',         cat: 'creatures' },
+  { en: 'orc (generic)',          orc: 'Urk',           cat: 'creatures' },
+  { en: 'elf',                    orc: 'Zan',           cat: 'creatures' },
+  { en: 'dwarf',                  orc: 'Gazat',         cat: 'creatures' },
+  { en: 'troll',                  orc: 'Olog',          cat: 'creatures' },
+  { en: 'ogre',                   orc: 'Drangu',        cat: 'creatures' },
+  { en: 'wolf',                   orc: 'Howlur',        cat: 'creatures' },
+  { en: 'demon',                  orc: 'Drok',          cat: 'creatures' },
+  { en: 'dragon',                 orc: 'Kulkodar',      cat: 'creatures' },
+  { en: 'ghost',                  orc: 'Angath',        cat: 'creatures' },
+  { en: 'ettin / giant',          orc: 'Vagun',         cat: 'creatures' },
+  { en: 'liche',                  orc: 'Laffur',        cat: 'creatures' },
+  { en: 'bear / pig',             orc: 'Buub',          cat: 'creatures' },
+  { en: 'small critter',          orc: 'Kon',           cat: 'creatures' },
+  { en: 'bird',                   orc: 'Zog',           cat: 'creatures' },
+  { en: 'snake',                  orc: 'Gajarpan',      cat: 'creatures' },
+  { en: 'sheep',                  orc: 'Bresh',         cat: 'creatures' },
+  { en: 'spider',                 orc: 'Tahbork',       cat: 'creatures' },
 ];
 
-// ═══════════════════════════════════════════════════════
-// TRANSLATION ENGINE
-// ═══════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════════════
+//  BUILD LOOKUP MAPS
+// ══════════════════════════════════════════════════════════════════
 
-// Build fast lookup maps
 const engToOrc = {};
 const orcToEng = {};
 
 DICT.forEach(entry => {
-  // English → Orcish: handle multi-label entries like "hello / hail"
-  const keys = entry.en.split('/').map(s => s.trim().toLowerCase().split(/\s+/)[0]);
-  keys.forEach(k => { if (k) engToOrc[k] = entry.orc; });
-  // Orcish → English
-  orcToEng[entry.orc.toLowerCase()] = entry.en.split('/')[0].trim();
+  // Index every slash-separated English label
+  entry.en.split('/').forEach(part => {
+    // Also strip parenthetical notes like "(one)"
+    const key = part.trim().replace(/\(.*?\)/g, '').trim().toLowerCase();
+    if (key) engToOrc[key] = entry.orc;
+  });
+  // Orcish → English (longest match first handled at runtime)
+  orcToEng[entry.orc.toLowerCase()] = entry.en.split('/')[0].replace(/\(.*?\)/g, '').trim();
 });
 
-// Phonetic Orcification rules for words NOT in dictionary
-function orcify(word) {
-  let w = word.toLowerCase();
-  // common replacements
-  w = w.replace(/\bthe\b/g, 'da');
-  w = w.replace(/\band\b/g, 'agh');
-  w = w.replace(/\bmy\b/g,  'eem');
-  w = w.replace(/\byour\b/g,"lat'z");
-  w = w.replace(/\bi\b/g,   'me');
-  w = w.replace(/ing\b/g,   "'n");
-  w = w.replace(/er\b/g,    "'r");
-  w = w.replace(/th/g,      'd');
-  w = w.replace(/wh/g,      'w');
-  w = w.replace(/ck/g,      'k');
-  w = w.replace(/ph/g,      'f');
-  w = w.replace(/tion/g,    'shun');
-  return w;
-}
+// Explicit short-word overrides (avoids suffix-stripping collisions)
+const OVERRIDES = {
+  'i':          'Meeb',   'me':         'Meeb',
+  'my':         'Meebz',  'mine':       'Meebz',
+  'you':        'Lat',    'your':       'Lat',
+  'we':         'Us',     'and':        'Agh',
+  'the':        'da',     'this':       'dis',
+  'that':       'dat',    'there':      'der',
+  'where':      'wer',    'what':       'wut',
+  'why':        'wai',    'they':       'dem',
+  'them':       'dem',    'no':         'Nub',
+  'yes':        'Yub',    'good':       'Hosh',
+  'bad':        'Nubhosh','ok':         'Hosh',
+  'okay':       'Hosh',   'hi':         'Ug',
+  'hello':      'Ug',     'goodbye':    "Gug'ye",
+  'thanks':     'Rulg',   'thank':      'Rulg',
+  'know':       'Gruk',   'understand': 'Gruk',
+  'kill':       'Klomp',  'attack':     'Klomp',
+  'hit':        'Klomp',  'trap':       'Krimp',
+  'charge':     'Kuj',    'forward':    'Fus',
+  'back':       'Bak',    'retreat':    'Rut',
+  'hide':       'Hyd',    'defend':     'Defenz',
+  'outside':    'Owtzide','inside':     'Enzide',
+  'blood':      'Grish',  'fire':       'Ghaash',
+  'water':      'Brugh',  'ice':        'Akul',
+  'wind':       'Yula',   'earth':      'Uzg',
+  'land':       'Uzg',    'sand':       'Uzgii',
+  'light':      'Juurz',  'dark':       'Burzum',
+  'darkness':   'Burzum', 'magic':      'Mojo',
+  'power':      'Gothurz','iron':       'Jarn',
+  'wood':       'Wuud',   'boards':     'Wuud',
+  'logs':       'Dru',    'lord':       'Goth',
+  'slave':      'Snaga',  'human':      'Oomie',
+  'orc':        'Urk',    'elf':        'Zan',
+  'dwarf':      'Gazat',  'troll':      'Olog',
+  'ogre':       'Drangu', 'wolf':       'Howlur',
+  'dragon':     'Kulkodar','demon':     'Drok',
+  'quest':      'Qwezt',  'bandage':    'Rag',
+  'horse':      'Fuud',   'mount':      'Fuud',
+  'axe':        'Lusk',   'sword':      'Zult',
+  'bow':        'Olig',   'crossbow':   'Xolig',
+  'dagger':     'Igg',    'spear':      'Kigg',
+  'mace':       'Womp',   'shield':     'Blokur',
+  'arrow':      'Lig',    'potion':     'Mojo Brugh',
+  'reagent':    'Weedz',  'leather':    'Leddurz',
+  'feather':    'Feddurz','wool':       'Wuul',
+  'crafter':    "Mak'r",  'fool':       'Glob',
+  'tree':       'Laus',   'snow':       'Bor',
+  'poison':     'Tokshun','acid':       'Kulz',
+  'mud':        'Balt',   'thunder':    'Zgur',
+};
+Object.assign(engToOrc, OVERRIDES);
+
+// ══════════════════════════════════════════════════════════════════
+//  TRANSLATION FUNCTIONS
+// ══════════════════════════════════════════════════════════════════
 
 function translateEngToOrc(text) {
-  // Orcish speech style rules applied to whole text first
-  let out = text;
-  // whole-sentence fixes
-  out = out.replace(/\bI\b/g, 'me');
-  out = out.replace(/\bmy\b/gi, 'eem');
-  out = out.replace(/\byour\b/gi, "lat'z");
-  out = out.replace(/\bthe\b/gi, 'da');
-  out = out.replace(/\band\b/gi, 'agh');
-  out = out.replace(/\bthat\b/gi, 'dat');
-  out = out.replace(/\bthis\b/gi, 'dis');
-  out = out.replace(/\bthere\b/gi, 'der');
-  out = out.replace(/\bwhere\b/gi, 'wer');
-  out = out.replace(/\byou\b/gi, 'lat');
-  out = out.replace(/\bthey\b/gi, 'dem');
-  out = out.replace(/\bthem\b/gi, 'dem');
-  out = out.replace(/\bwhat\b/gi, 'wut');
-  out = out.replace(/\bwhy\b/gi, 'wai');
-
-  // word-by-word dictionary lookup
-  out = out.replace(/\b([a-z']+)\b/gi, (match) => {
+  return text.replace(/\b([a-zA-Z'-]+)\b/g, (match) => {
     const lower = match.toLowerCase();
+
     if (engToOrc[lower]) return engToOrc[lower];
-    // try with suffix stripped
-    const stripped = lower.replace(/(ing|er|s|ed)$/, '');
-    if (stripped !== lower && engToOrc[stripped]) return engToOrc[stripped];
-    // phonetic fallback for long words
+
+    // Try common suffixes — check stem in dictionary
+    const suffixes = [
+      ['ing', "'n"], ['ers', 'urz'], ['er', 'ur'],
+      ['ed', ''], ['s', ''],
+    ];
+    for (const [suf, rep] of suffixes) {
+      if (lower.endsWith(suf)) {
+        const stem = lower.slice(0, -suf.length);
+        if (stem.length > 2 && engToOrc[stem]) {
+          return engToOrc[stem] + rep;
+        }
+      }
+    }
+
+    // Phonetic fallback for longer unknown words
     if (match.length > 4) {
-      let w = match.toLowerCase();
+      let w = lower;
       w = w.replace(/tion/g, 'shun');
       w = w.replace(/ing\b/g, "'n");
-      w = w.replace(/er\b/g, "'r");
+      w = w.replace(/er\b/g, 'ur');
       w = w.replace(/ph/g, 'f');
       w = w.replace(/ck/g, 'k');
       w = w.replace(/wh/g, 'w');
@@ -649,22 +532,23 @@ function translateEngToOrc(text) {
     }
     return match;
   });
-
-  return out;
 }
 
 function translateOrcToEng(text) {
-  return text.replace(/\b([a-z'']+)\b/gi, (match) => {
-    const lower = match.toLowerCase();
-    if (orcToEng[lower]) return orcToEng[lower];
-    return match;
+  // Sort keys longest-first so "Mojo Brugh" matches before "Mojo"
+  const keys = Object.keys(orcToEng).sort((a, b) => b.length - a.length);
+  let out = text;
+  keys.forEach(key => {
+    const re = new RegExp('\\b' + key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b', 'gi');
+    out = out.replace(re, orcToEng[key]);
   });
+  return out;
 }
 
-// ═══════════════════════════════════════════════════════
-// STATE & UI
-// ═══════════════════════════════════════════════════════
-let direction = 'eng'; // 'eng' = English→Orc, 'orc' = Orc→English
+// ══════════════════════════════════════════════════════════════════
+//  UI
+// ══════════════════════════════════════════════════════════════════
+let direction = 'eng';
 let selectedCat = 'all';
 
 function setDir(dir) {
@@ -673,19 +557,16 @@ function setDir(dir) {
   document.getElementById('btn-orc').classList.toggle('active', dir === 'orc');
   document.getElementById('label-in').textContent  = dir === 'eng' ? '✦ Common Tongue' : '✦ Orcish (Urk Blah)';
   document.getElementById('label-out').textContent = dir === 'eng' ? '✦ Orcish (Urk Blah)' : '✦ Common Tongue';
-  document.getElementById('input-text').placeholder = dir === 'eng'
-    ? "Type yer words here, oomie…"
-    : "Blah da urk speak here…";
+  document.getElementById('input-text').placeholder =
+    dir === 'eng' ? 'Type yer words here, oomie…' : 'Blah da urk speak here…';
   document.getElementById('output-text').value = '';
   liveTranslate();
 }
 
 function swapDir() {
-  const inp = document.getElementById('input-text');
-  const out = document.getElementById('output-text');
-  const outVal = out.value;
+  const outVal = document.getElementById('output-text').value;
   setDir(direction === 'eng' ? 'orc' : 'eng');
-  inp.value = outVal;
+  document.getElementById('input-text').value = outVal;
   liveTranslate();
 }
 
@@ -693,39 +574,51 @@ function doTranslate() { liveTranslate(); }
 
 function liveTranslate() {
   const inp = document.getElementById('input-text').value;
-  if (!inp.trim()) { document.getElementById('output-text').value = ''; return; }
-  const result = direction === 'eng' ? translateEngToOrc(inp) : translateOrcToEng(inp);
-  document.getElementById('output-text').value = result;
+  document.getElementById('output-text').value =
+    inp.trim() ? (direction === 'eng' ? translateEngToOrc(inp) : translateOrcToEng(inp)) : '';
 }
 
-// ═══════════════════════════════════════════════════════
-// DICTIONARY RENDERING
-// ═══════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════════════
+//  DICTIONARY PANEL
+// ══════════════════════════════════════════════════════════════════
+const CAT_LABELS = {
+  all: 'All', general: 'General', battle: 'Battle ⚔',
+  crafting: 'Crafting', numbers: 'Numbers', weapons: 'Weapons',
+  elements: 'Elements', creatures: 'Creatures'
+};
+
 function renderDict() {
-  const search = document.getElementById('dict-search').value.toLowerCase();
+  const search = (document.getElementById('dict-search').value || '').toLowerCase();
   const grid = document.getElementById('dict-grid');
   grid.innerHTML = '';
+
   const filtered = DICT.filter(e => {
-    const catMatch = selectedCat === 'all' || e.cat === selectedCat;
-    const searchMatch = !search || e.en.toLowerCase().includes(search) || e.orc.toLowerCase().includes(search);
-    return catMatch && searchMatch;
+    const catOk = selectedCat === 'all' || e.cat === selectedCat;
+    const srchOk = !search || e.en.toLowerCase().includes(search) || e.orc.toLowerCase().includes(search);
+    return catOk && srchOk;
   });
+
+  if (!filtered.length) {
+    grid.innerHTML = '<div class="empty-msg">Nub wordz found, glob.</div>';
+    return;
+  }
+
   filtered.forEach(entry => {
     const row = document.createElement('div');
     row.className = 'dict-row';
-    row.title = 'Click to copy Orcish word';
-    row.innerHTML = `<span class="dict-eng">${entry.en}</span><span class="dict-sep">→</span><span class="dict-orc">${entry.orc}</span>`;
-    row.onclick = () => {
+    row.title = 'Click to copy: ' + entry.orc;
+    row.innerHTML =
+      `<span class="dict-eng">${entry.en}</span>` +
+      `<span class="dict-sep">→</span>` +
+      `<span class="dict-orc">${entry.orc}</span>`;
+    row.addEventListener('click', () => {
       navigator.clipboard.writeText(entry.orc).catch(() => {});
       row.classList.remove('copied');
       void row.offsetWidth;
       row.classList.add('copied');
-    };
+    });
     grid.appendChild(row);
   });
-  if (filtered.length === 0) {
-    grid.innerHTML = '<div style="color:#888;font-style:italic;padding:0.5rem;">Nub wordz found, glob.</div>';
-  }
 }
 
 function buildCatButtons() {
@@ -734,13 +627,13 @@ function buildCatButtons() {
   cats.forEach(cat => {
     const btn = document.createElement('button');
     btn.className = 'cat-btn' + (cat === 'all' ? ' active' : '');
-    btn.textContent = cat;
-    btn.onclick = () => {
+    btn.textContent = CAT_LABELS[cat] || cat;
+    btn.addEventListener('click', () => {
       selectedCat = cat;
       document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       renderDict();
-    };
+    });
     container.appendChild(btn);
   });
 }
