@@ -279,148 +279,256 @@
 
 <script>
 // ══════════════════════════════════════════════════════════════════
-//  DICTIONARY — canonical Bloodclan source, all sections
+//  PHRASE MAP — checked first, before word-by-word translation
+//  Handles common multi-word expressions
+// ══════════════════════════════════════════════════════════════════
+const PHRASE_MAP = [
+  [/\bgive\s+(?:us\s+|me\s+|da\s+)?tribute\b/gi, 'gib tribyute'],
+  [/\bpay\s+(?:your\s+|da\s+|the\s+)?tribute\b/gi, 'gib tribyute'],
+  [/\bthank\s+you\b/gi,               'Rulg lat'],
+  [/\bi\s+don'?t\s+know\b/gi,         'Meeb nub gruk'],
+  [/\bdo\s+you\s+know\b/gi,           'Lat gruk?'],
+  [/\bhow\s+are\s+you\b/gi,           'Wut iz lat?'],
+  [/\byou\s+are\b/gi,                 'Lat iz'],
+  [/\bi\s+am\b/gi,                    'Meeb iz'],
+  [/\bwe\s+are\b/gi,                  'Us iz'],
+  [/\bthey\s+are\b/gi,                'Dem iz'],
+  [/\bhe\s+is\b/gi,                   'Heem iz'],
+  [/\bshe\s+is\b/gi,                  'Hur iz'],
+  [/\bcome\s+here\b/gi,               "Kum 'ere"],
+  [/\bgo\s+away\b/gi,                 'Rut owtzide'],
+  [/\bget\s+out\b/gi,                 'Git owtzide!'],
+  [/\bget\s+back\b/gi,                'Bak!'],
+  [/\bshut\s+up\b/gi,                 'Nub blah!'],
+  [/\bfall\s+back\b/gi,               'Bak! Rut!'],
+  [/\bfall\s+in\b/gi,                 'Fus! Kuj!'],
+  [/\bfollow\s+me\b/gi,               'Fus Meeb'],
+  [/\bkill\s+(?:them|him|her|it)\b/gi,'Klomp dem!'],
+  [/\battack!\b/gi,                   'Klomp! Hoowah!'],
+  [/\bvery\s+good\b/gi,               'Bubhosh'],
+  [/\bvery\s+bad\b/gi,                'Nubhosh bubhosh'],
+  [/\bgood\s+morning\b/gi,            'Hosh mornin'],
+  [/\bgood\s+(?:night|eve)\b/gi,      'Hosh nite'],
+  [/\bgood\s+bye\b/gi,                "Gug'ye"],
+  [/\bha(?:\s*ha){2,}\b/gi,           'Har har har!'],
+  [/\b(?:lol|lmao|rofl|xd)\b/gi,     'Har har!'],
+  [/\bha\s+ha\b/gi,                   'Har har!'],
+  [/\bi\s+see\b/gi,                   'Meeb see'],
+  [/\bi\s+know\b/gi,                  'Meeb gruk'],
+  [/\bi\s+don'?t\b/gi,               'Meeb nub'],
+  [/\bi\s+want\b/gi,                  'Meeb wunt'],
+  [/\bi\s+need\b/gi,                  'Meeb needz'],
+  [/\bi\s+have\b/gi,                  'Meeb haz'],
+  [/\bi\s+will\b/gi,                  'Meeb wil'],
+  [/\bi\s+can\b/gi,                   'Meeb kan'],
+  [/\byou\s+will\s+die\b/gi,          'Lat wil flat!'],
+  [/\byou\s+must\b/gi,                'Lat must'],
+  [/\byou\s+will\b/gi,                'Lat wil'],
+  [/\byou\s+have\b/gi,                'Lat haz'],
+  [/\bdo\s+not\b/gi,                  'nub'],
+  [/\bnot\s+good\b/gi,                'Nubhosh'],
+  [/\b(?:war|battle)\s+cry\b/gi,      'Hoowah!'],
+  [/\bright\s+now\b/gi,               'now!'],
+  [/\bcome\s+on\b/gi,                 'Kum on!'],
+  [/\blet'?s\s+go\b/gi,              'Fus! Hoowah!'],
+  [/\bstand\s+(?:your\s+)?ground\b/gi,'Stup! Defenz!'],
+  [/\bno\s+one\b/gi,                  'nub urk'],
+  [/\beveryone\b/gi,                  'al urks'],
+  [/\bsomething\b/gi,                 'sumfin'],
+  [/\bnothing\b/gi,                   'nuffin'],
+  [/\bsomeone\b/gi,                   'sum urk'],
+  [/\banyone\b/gi,                    'enee urk'],
+  [/\bbow\s+down\b/gi,                'neel'],
+  [/\bover\s+there\b/gi,              'ovur der'],
+  [/\bmy\s+name\s+is\b/gi,           'Meeb iz'],
+  [/\bwhat\s+is\b/gi,                 'wut iz'],
+  [/\bwhere\s+is\b/gi,                'wer iz'],
+  [/\bwho\s+is\b/gi,                  'hoo iz'],
+  [/\bof\s+the\b/gi,                  'ov da'],
+  [/\bin\s+the\b/gi,                  'in da'],
+  [/\bto\s+the\b/gi,                  'tu da'],
+  [/\bfor\s+the\b/gi,                 'fur da'],
+];
+
+// ══════════════════════════════════════════════════════════════════
+//  DICTIONARY — Bloodclan / Shadowclan / UO Outlands dialect
 //  Categories: general | battle | crafting | numbers | weapons | elements | creatures
 // ══════════════════════════════════════════════════════════════════
 const DICT = [
 
   // ── GENERAL ─────────────────────────────────────────────────────
-  { en: 'hello',                  orc: 'Ug',           cat: 'general' },
-  { en: 'goodbye',                orc: "Gug'ye",        cat: 'general' },
-  { en: 'thanks',                 orc: 'Rulg',          cat: 'general' },
-  { en: 'know / understand',      orc: 'Gruk',          cat: 'general' },
-  { en: 'yes',                    orc: 'Yub',           cat: 'general' },
-  { en: 'no',                     orc: 'Nub',           cat: 'general' },
-  { en: 'magic',                  orc: 'Mojo',          cat: 'general' },
-  { en: 'guildstone / rune',      orc: 'Rok',           cat: 'general' },
-  { en: 'talk / say / words',     orc: 'Blah',          cat: 'general' },
-  { en: 'orc fort',               orc: 'Urkala',        cat: 'general' },
-  { en: 'very good',              orc: 'Bubhosh',       cat: 'general' },
-  { en: 'good / okay',            orc: 'Hosh',          cat: 'general' },
-  { en: 'bad / crap',             orc: 'Nubhosh',       cat: 'general' },
-  { en: 'quest',                  orc: 'Qwezt',         cat: 'general' },
-  { en: 'human',                  orc: 'Oomie',         cat: 'general' },
-  { en: 'bloodclan orc',          orc: 'Ork',           cat: 'general' },
-  { en: 'land',                   orc: 'Uzg',           cat: 'general' },
-  { en: 'you (one)',              orc: 'Lat',           cat: 'general' },
-  { en: 'you (all)',              orc: 'Latz',          cat: 'general' },
-  { en: 'i / me',                 orc: 'Meeb',          cat: 'general' },
-  { en: 'my / mine',              orc: 'Meebz',         cat: 'general' },
-  { en: 'and',                    orc: 'Agh',           cat: 'general' },
-  { en: 'battlecry',              orc: 'Hoowah!',       cat: 'general' },
-  { en: 'kill / attack',          orc: 'Klomp',         cat: 'general' },
-  { en: 'trap / surround',        orc: 'Krimp',         cat: 'general' },
-  { en: 'lord',                   orc: 'Goth',          cat: 'general' },
-  { en: 'resurrection',           orc: 'Flezhie',       cat: 'general' },
-  { en: 'bandage',                orc: 'Rag',           cat: 'general' },
-  { en: 'mount / horse',          orc: 'Fuud',          cat: 'general' },
-  { en: 'slave',                  orc: 'Snaga',         cat: 'general' },
-  { en: 'fool',                   orc: 'Glob',          cat: 'general' },
-  { en: 'stinking',               orc: 'Pushdug',       cat: 'general' },
-  { en: 'party chat',             orc: 'Zuul Lynk',     cat: 'general' },
-  { en: 'path',                   orc: 'Shum',          cat: 'general' },
+  { en: 'hello / hi',              orc: 'Ug',            cat: 'general' },
+  { en: 'goodbye / bye',           orc: "Gug'ye",        cat: 'general' },
+  { en: 'thanks',                  orc: 'Rulg',          cat: 'general' },
+  { en: 'know / understand',       orc: 'Gruk',          cat: 'general' },
+  { en: 'yes / yeah',              orc: 'Yub',           cat: 'general' },
+  { en: 'no / nope',               orc: 'Nub',           cat: 'general' },
+  { en: 'ok / okay / alright',     orc: 'Hosh',          cat: 'general' },
+  { en: 'ok (obedient)',           orc: 'Dabu',          cat: 'general' },
+  { en: 'magic',                   orc: 'Mojo',          cat: 'general' },
+  { en: 'magic user / mage',       orc: 'Mojoka',        cat: 'general' },
+  { en: 'guildstone / rune',       orc: 'Rok',           cat: 'general' },
+  { en: 'talk / say / speak',      orc: 'Blah',          cat: 'general' },
+  { en: 'orc fort / stronghold',   orc: 'Urkala',        cat: 'general' },
+  { en: 'very good / excellent',   orc: 'Bubhosh',       cat: 'general' },
+  { en: 'good',                    orc: 'Hosh',          cat: 'general' },
+  { en: 'bad / crap',              orc: 'Nubhosh',       cat: 'general' },
+  { en: 'quest',                   orc: 'Qwezt',         cat: 'general' },
+  { en: 'human',                   orc: 'Oomie',         cat: 'general' },
+  { en: 'bloodclan orc',           orc: 'Ork',           cat: 'general' },
+  { en: 'land / earth',            orc: 'Uzg',           cat: 'general' },
+  { en: 'you (one)',               orc: 'Lat',           cat: 'general' },
+  { en: 'you (all)',               orc: 'Latz',          cat: 'general' },
+  { en: 'i / me',                  orc: 'Meeb',          cat: 'general' },
+  { en: 'my / mine',               orc: 'Meebz',         cat: 'general' },
+  { en: 'and',                     orc: 'Agh',           cat: 'general' },
+  { en: 'battlecry',               orc: 'Hoowah!',       cat: 'general' },
+  { en: 'kill / attack / hit',     orc: 'Klomp',         cat: 'general' },
+  { en: 'fight / brawl',           orc: 'Skrap',         cat: 'general' },
+  { en: 'trap / surround',         orc: 'Krimp',         cat: 'general' },
+  { en: 'lord / boss / chief',     orc: 'Goth',          cat: 'general' },
+  { en: 'resurrection',            orc: 'Flezhie',       cat: 'general' },
+  { en: 'bandage / rag',           orc: 'Rag',           cat: 'general' },
+  { en: 'mount / horse',           orc: 'Fuud',          cat: 'general' },
+  { en: 'slave / prisoner',        orc: 'Snaga',         cat: 'general' },
+  { en: 'fool / idiot',            orc: 'Glob',          cat: 'general' },
+  { en: 'stinking / filthy',       orc: 'Pushdug',       cat: 'general' },
+  { en: 'party chat',              orc: 'Zuul Lynk',     cat: 'general' },
+  { en: 'path / route',            orc: 'Shum',          cat: 'general' },
+  { en: 'laugh',                   orc: 'Har har!',      cat: 'general' },
+  { en: 'give / hand over',        orc: 'Gib',           cat: 'general' },
+  { en: 'take',                    orc: 'Tak',           cat: 'general' },
+  { en: 'tribute',                 orc: 'Tribyute',      cat: 'general' },
+  { en: 'gold / money / loot',     orc: 'Shiniez',       cat: 'general' },
+  { en: 'food / grub',             orc: 'Grub',          cat: 'general' },
+  { en: 'eat / consume',           orc: 'Chom',          cat: 'general' },
+  { en: 'drink',                   orc: 'Gulp',          cat: 'general' },
+  { en: 'dead / death / die',      orc: 'Flat',          cat: 'general' },
+  { en: 'pain / hurt',             orc: 'Urtz',          cat: 'general' },
+  { en: 'big / large / huge',      orc: 'Beg',           cat: 'general' },
+  { en: 'small / little / tiny',   orc: 'Lil',           cat: 'general' },
+  { en: 'strong / strength',       orc: 'Stronk',        cat: 'general' },
+  { en: 'stupid / dumb',           orc: 'Stoopid',       cat: 'general' },
+  { en: 'mother',                  orc: 'Momo',          cat: 'general' },
+  { en: 'curse / damn',            orc: 'Skah',          cat: 'general' },
+  { en: 'war',                     orc: 'Waugh',         cat: 'general' },
+  { en: 'come / approach',         orc: 'Kum',           cat: 'general' },
+  { en: 'run / flee',              orc: 'Rut',           cat: 'general' },
+  { en: 'flesh / meat',            orc: 'Flezh',         cat: 'general' },
+  { en: 'clan / tribe / guild',    orc: 'Klan',          cat: 'general' },
+  { en: 'warrior / fighter',       orc: "Klomp'r",       cat: 'general' },
+  { en: 'enemy / foe',             orc: 'Enemee',        cat: 'general' },
+  { en: 'steal / sneak',           orc: 'Snek',          cat: 'general' },
+  { en: 'honor / glory',           orc: 'Gloree',        cat: 'general' },
 
   // ── BATTLE COMMANDS ─────────────────────────────────────────────
-  { en: 'charge',                 orc: 'Kuj',           cat: 'battle' },
-  { en: 'forward',                orc: 'Fus',           cat: 'battle' },
-  { en: 'back',                   orc: 'Bak',           cat: 'battle' },
-  { en: 'retreat',                orc: 'Rut',           cat: 'battle' },
-  { en: 'hide',                   orc: 'Hyd',           cat: 'battle' },
-  { en: 'outside',                orc: 'Owtzide',       cat: 'battle' },
-  { en: 'inside',                 orc: 'Enzide',        cat: 'battle' },
-  { en: 'defend',                 orc: 'Defenz',        cat: 'battle' },
+  { en: 'charge',                  orc: 'Kuj',           cat: 'battle' },
+  { en: 'forward / advance',       orc: 'Fus',           cat: 'battle' },
+  { en: 'back / fall back',        orc: 'Bak',           cat: 'battle' },
+  { en: 'retreat',                 orc: 'Rut',           cat: 'battle' },
+  { en: 'hide / stealth',          orc: 'Hyd',           cat: 'battle' },
+  { en: 'outside',                 orc: 'Owtzide',       cat: 'battle' },
+  { en: 'inside',                  orc: 'Enzide',        cat: 'battle' },
+  { en: 'defend / hold',           orc: 'Defenz',        cat: 'battle' },
+  { en: 'stop / halt',             orc: 'Stup',          cat: 'battle' },
+  { en: 'surround / encircle',     orc: 'Krimp',         cat: 'battle' },
+  { en: 'follow',                  orc: 'Fus',           cat: 'battle' },
+  { en: 'ready / prepare',         orc: 'Redee',         cat: 'battle' },
+  { en: 'surrender / give up',     orc: 'Gib up',        cat: 'battle' },
+  { en: 'kneel',                   orc: 'Neel',          cat: 'battle' },
 
   // ── CRAFTING ────────────────────────────────────────────────────
-  { en: 'crafter',                orc: "Mak'r",         cat: 'crafting' },
-  { en: 'scissors',               orc: 'Cutturz',       cat: 'crafting' },
-  { en: 'wood / boards / logs',   orc: 'Wuud',          cat: 'crafting' },
-  { en: 'wool',                   orc: 'Wuul',          cat: 'crafting' },
-  { en: 'leathers',               orc: 'Leddurz',       cat: 'crafting' },
-  { en: 'feathers',               orc: 'Feddurz',       cat: 'crafting' },
-  { en: 'reagents',               orc: 'Weedz',         cat: 'crafting' },
-  { en: 'potion',                 orc: 'Mojo Brugh',    cat: 'crafting' },
+  { en: 'crafter',                 orc: "Mak'r",         cat: 'crafting' },
+  { en: 'scissors',                orc: 'Cutturz',       cat: 'crafting' },
+  { en: 'wood / boards / logs',    orc: 'Wuud',          cat: 'crafting' },
+  { en: 'wool',                    orc: 'Wuul',          cat: 'crafting' },
+  { en: 'leathers',                orc: 'Leddurz',       cat: 'crafting' },
+  { en: 'feathers',                orc: 'Feddurz',       cat: 'crafting' },
+  { en: 'reagents',                orc: 'Weedz',         cat: 'crafting' },
+  { en: 'potion',                  orc: 'Mojo Brugh',    cat: 'crafting' },
+  { en: 'armor / armour',          orc: 'Armur',         cat: 'crafting' },
+  { en: 'weapon',                  orc: 'Weppun',        cat: 'crafting' },
 
   // ── NUMBERS ─────────────────────────────────────────────────────
-  { en: 'zero (0)',               orc: 'Zuth',          cat: 'numbers' },
-  { en: 'one (1)',                orc: 'Ash',           cat: 'numbers' },
-  { en: 'two (2)',                orc: 'Dub',           cat: 'numbers' },
-  { en: 'three (3)',              orc: 'Gahk',          cat: 'numbers' },
-  { en: 'four (4)',               orc: 'Futh',          cat: 'numbers' },
-  { en: 'five (5)',               orc: 'H',             cat: 'numbers' },
-  { en: 'six (6)',                orc: 'Hash',          cat: 'numbers' },
-  { en: 'seven (7)',              orc: 'Hdub',          cat: 'numbers' },
-  { en: 'eight (8)',              orc: 'Hgahk',         cat: 'numbers' },
-  { en: 'nine (9)',               orc: 'Hfuth',         cat: 'numbers' },
-  { en: 'ten (10)',               orc: 'HH',            cat: 'numbers' },
-  { en: 'twenty (20)',            orc: 'Dubti',         cat: 'numbers' },
-  { en: 'thirty (30)',            orc: 'Gahkti',        cat: 'numbers' },
-  { en: 'forty (40)',             orc: 'Futhti',        cat: 'numbers' },
-  { en: 'fifty (50)',             orc: 'Hz',            cat: 'numbers' },
-  { en: 'sixty (60)',             orc: 'Hgashi',        cat: 'numbers' },
-  { en: 'seventy (70)',           orc: 'Hdubti',        cat: 'numbers' },
-  { en: 'eighty (80)',            orc: 'Hgahkti',       cat: 'numbers' },
-  { en: 'ninety (90)',            orc: 'Hfuthti',       cat: 'numbers' },
-  { en: 'hundred',               orc: 'Undred',        cat: 'numbers' },
-  { en: 'thousand',              orc: 'Touzand',       cat: 'numbers' },
-  { en: 'million',               orc: 'Milliun',       cat: 'numbers' },
+  { en: 'zero (0)',                orc: 'Zuth',          cat: 'numbers' },
+  { en: 'one (1)',                 orc: 'Ash',           cat: 'numbers' },
+  { en: 'two (2)',                 orc: 'Dub',           cat: 'numbers' },
+  { en: 'three (3)',               orc: 'Gahk',          cat: 'numbers' },
+  { en: 'four (4)',                orc: 'Futh',          cat: 'numbers' },
+  { en: 'five (5)',                orc: 'H',             cat: 'numbers' },
+  { en: 'six (6)',                 orc: 'Hash',          cat: 'numbers' },
+  { en: 'seven (7)',               orc: 'Hdub',          cat: 'numbers' },
+  { en: 'eight (8)',               orc: 'Hgahk',         cat: 'numbers' },
+  { en: 'nine (9)',                orc: 'Hfuth',         cat: 'numbers' },
+  { en: 'ten (10)',                orc: 'HH',            cat: 'numbers' },
+  { en: 'twenty (20)',             orc: 'Dubti',         cat: 'numbers' },
+  { en: 'thirty (30)',             orc: 'Gahkti',        cat: 'numbers' },
+  { en: 'forty (40)',              orc: 'Futhti',        cat: 'numbers' },
+  { en: 'fifty (50)',              orc: 'Hz',            cat: 'numbers' },
+  { en: 'sixty (60)',              orc: 'Hgashi',        cat: 'numbers' },
+  { en: 'seventy (70)',            orc: 'Hdubti',        cat: 'numbers' },
+  { en: 'eighty (80)',             orc: 'Hgahkti',       cat: 'numbers' },
+  { en: 'ninety (90)',             orc: 'Hfuthti',       cat: 'numbers' },
+  { en: 'hundred',                orc: 'Undred',        cat: 'numbers' },
+  { en: 'thousand',               orc: 'Touzand',       cat: 'numbers' },
+  { en: 'million',                orc: 'Milliun',       cat: 'numbers' },
 
   // ── WEAPONS ─────────────────────────────────────────────────────
-  { en: 'mace',                   orc: 'Womp',          cat: 'weapons' },
-  { en: 'macer',                  orc: 'Wompur',        cat: 'weapons' },
-  { en: 'bow',                    orc: 'Olig',          cat: 'weapons' },
-  { en: 'crossbow',               orc: 'Xolig',         cat: 'weapons' },
-  { en: 'arrow',                  orc: 'Lig',           cat: 'weapons' },
-  { en: 'crossbow bolt',          orc: 'Xlig',          cat: 'weapons' },
-  { en: 'archer',                 orc: 'Oligur',        cat: 'weapons' },
-  { en: 'dagger',                 orc: 'Igg',           cat: 'weapons' },
-  { en: 'kryss',                  orc: 'Kult',          cat: 'weapons' },
-  { en: 'spear',                  orc: 'Kigg',          cat: 'weapons' },
-  { en: 'fencer',                 orc: 'Kiggur',        cat: 'weapons' },
-  { en: 'axe',                    orc: 'Lusk',          cat: 'weapons' },
-  { en: 'axer',                   orc: 'Luskur',        cat: 'weapons' },
-  { en: 'sword',                  orc: 'Zult',          cat: 'weapons' },
-  { en: 'swordsman',              orc: 'Zultur',        cat: 'weapons' },
-  { en: 'shield',                 orc: 'Blokur',        cat: 'weapons' },
+  { en: 'mace',                    orc: 'Womp',          cat: 'weapons' },
+  { en: 'macer',                   orc: 'Wompur',        cat: 'weapons' },
+  { en: 'bow (weapon)',            orc: 'Olig',          cat: 'weapons' },
+  { en: 'crossbow',                orc: 'Xolig',         cat: 'weapons' },
+  { en: 'arrow',                   orc: 'Lig',           cat: 'weapons' },
+  { en: 'crossbow bolt',           orc: 'Xlig',          cat: 'weapons' },
+  { en: 'archer',                  orc: 'Oligur',        cat: 'weapons' },
+  { en: 'dagger',                  orc: 'Igg',           cat: 'weapons' },
+  { en: 'kryss',                   orc: 'Kult',          cat: 'weapons' },
+  { en: 'spear',                   orc: 'Kigg',          cat: 'weapons' },
+  { en: 'fencer',                  orc: 'Kiggur',        cat: 'weapons' },
+  { en: 'axe',                     orc: 'Lusk',          cat: 'weapons' },
+  { en: 'axer',                    orc: 'Luskur',        cat: 'weapons' },
+  { en: 'sword',                   orc: 'Zult',          cat: 'weapons' },
+  { en: 'swordsman',               orc: 'Zultur',        cat: 'weapons' },
+  { en: 'shield',                  orc: 'Blokur',        cat: 'weapons' },
 
   // ── ELEMENTS ────────────────────────────────────────────────────
-  { en: 'power',                  orc: 'Gothurz',       cat: 'elements' },
-  { en: 'blood',                  orc: 'Grish',         cat: 'elements' },
-  { en: 'iron',                   orc: 'Jarn',          cat: 'elements' },
-  { en: 'boards / logs (dru)',    orc: 'Dru',           cat: 'elements' },
-  { en: 'wind',                   orc: 'Yula',          cat: 'elements' },
-  { en: 'water',                  orc: 'Brugh',         cat: 'elements' },
-  { en: 'fire',                   orc: 'Ghaash',        cat: 'elements' },
-  { en: 'earth / land',           orc: 'Uzg',           cat: 'elements' },
-  { en: 'sand',                   orc: 'Uzgii',         cat: 'elements' },
-  { en: 'light',                  orc: 'Juurz',         cat: 'elements' },
-  { en: 'darkness',               orc: 'Burzum',        cat: 'elements' },
-  { en: 'ice',                    orc: 'Akul',          cat: 'elements' },
-  { en: 'thunder',                orc: 'Zgur',          cat: 'elements' },
-  { en: 'mud',                    orc: 'Balt',          cat: 'elements' },
-  { en: 'tree',                   orc: 'Laus',          cat: 'elements' },
-  { en: 'snow',                   orc: 'Bor',           cat: 'elements' },
-  { en: 'poison',                 orc: 'Tokshun',       cat: 'elements' },
-  { en: 'acid',                   orc: 'Kulz',          cat: 'elements' },
+  { en: 'power',                   orc: 'Gothurz',       cat: 'elements' },
+  { en: 'blood',                   orc: 'Grish',         cat: 'elements' },
+  { en: 'iron',                    orc: 'Jarn',          cat: 'elements' },
+  { en: 'boards / logs (dru)',     orc: 'Dru',           cat: 'elements' },
+  { en: 'wind',                    orc: 'Yula',          cat: 'elements' },
+  { en: 'water',                   orc: 'Brugh',         cat: 'elements' },
+  { en: 'fire',                    orc: 'Ghaash',        cat: 'elements' },
+  { en: 'sand',                    orc: 'Uzgii',         cat: 'elements' },
+  { en: 'light',                   orc: 'Juurz',         cat: 'elements' },
+  { en: 'darkness',                orc: 'Burzum',        cat: 'elements' },
+  { en: 'ice',                     orc: 'Akul',          cat: 'elements' },
+  { en: 'thunder',                 orc: 'Zgur',          cat: 'elements' },
+  { en: 'mud',                     orc: 'Balt',          cat: 'elements' },
+  { en: 'tree',                    orc: 'Laus',          cat: 'elements' },
+  { en: 'snow',                    orc: 'Bor',           cat: 'elements' },
+  { en: 'poison',                  orc: 'Tokshun',       cat: 'elements' },
+  { en: 'acid',                    orc: 'Kulz',          cat: 'elements' },
 
   // ── CREATURES ───────────────────────────────────────────────────
-  { en: 'human (oomie)',          orc: 'Oomie',         cat: 'creatures' },
-  { en: 'orc (generic)',          orc: 'Urk',           cat: 'creatures' },
-  { en: 'elf',                    orc: 'Zan',           cat: 'creatures' },
-  { en: 'dwarf',                  orc: 'Gazat',         cat: 'creatures' },
-  { en: 'troll',                  orc: 'Olog',          cat: 'creatures' },
-  { en: 'ogre',                   orc: 'Drangu',        cat: 'creatures' },
-  { en: 'wolf',                   orc: 'Howlur',        cat: 'creatures' },
-  { en: 'demon',                  orc: 'Drok',          cat: 'creatures' },
-  { en: 'dragon',                 orc: 'Kulkodar',      cat: 'creatures' },
-  { en: 'ghost',                  orc: 'Angath',        cat: 'creatures' },
-  { en: 'ettin / giant',          orc: 'Vagun',         cat: 'creatures' },
-  { en: 'liche',                  orc: 'Laffur',        cat: 'creatures' },
-  { en: 'bear / pig',             orc: 'Buub',          cat: 'creatures' },
-  { en: 'small critter',          orc: 'Kon',           cat: 'creatures' },
-  { en: 'bird',                   orc: 'Zog',           cat: 'creatures' },
-  { en: 'snake',                  orc: 'Gajarpan',      cat: 'creatures' },
-  { en: 'sheep',                  orc: 'Bresh',         cat: 'creatures' },
-  { en: 'spider',                 orc: 'Tahbork',       cat: 'creatures' },
+  { en: 'human (oomie)',           orc: 'Oomie',         cat: 'creatures' },
+  { en: 'orc (generic)',           orc: 'Urk',           cat: 'creatures' },
+  { en: 'elf',                     orc: 'Zan',           cat: 'creatures' },
+  { en: 'dwarf',                   orc: 'Gazat',         cat: 'creatures' },
+  { en: 'troll',                   orc: 'Olog',          cat: 'creatures' },
+  { en: 'ogre',                    orc: 'Drangu',        cat: 'creatures' },
+  { en: 'wolf',                    orc: 'Howlur',        cat: 'creatures' },
+  { en: 'demon',                   orc: 'Drok',          cat: 'creatures' },
+  { en: 'dragon',                  orc: 'Kulkodar',      cat: 'creatures' },
+  { en: 'ghost',                   orc: 'Angath',        cat: 'creatures' },
+  { en: 'ettin / giant',           orc: 'Vagun',         cat: 'creatures' },
+  { en: 'liche',                   orc: 'Laffur',        cat: 'creatures' },
+  { en: 'bear / pig',              orc: 'Buub',          cat: 'creatures' },
+  { en: 'small critter',           orc: 'Kon',           cat: 'creatures' },
+  { en: 'bird',                    orc: 'Zog',           cat: 'creatures' },
+  { en: 'snake',                   orc: 'Gajarpan',      cat: 'creatures' },
+  { en: 'sheep',                   orc: 'Bresh',         cat: 'creatures' },
+  { en: 'spider',                  orc: 'Tahbork',       cat: 'creatures' },
 ];
 
 // ══════════════════════════════════════════════════════════════════
@@ -441,97 +549,283 @@ DICT.forEach(entry => {
   orcToEng[entry.orc.toLowerCase()] = entry.en.split('/')[0].replace(/\(.*?\)/g, '').trim();
 });
 
-// Explicit short-word overrides (avoids suffix-stripping collisions)
+// ── Comprehensive overrides: grammar words, pronouns, verbs, common nouns ─
 const OVERRIDES = {
-  'i':          'Meeb',   'me':         'Meeb',
-  'my':         'Meebz',  'mine':       'Meebz',
-  'you':        'Lat',    'your':       'Lat',
-  'we':         'Us',     'and':        'Agh',
-  'the':        'da',     'this':       'dis',
-  'that':       'dat',    'there':      'der',
-  'where':      'wer',    'what':       'wut',
-  'why':        'wai',    'they':       'dem',
-  'them':       'dem',    'no':         'Nub',
-  'yes':        'Yub',    'good':       'Hosh',
-  'bad':        'Nubhosh','ok':         'Hosh',
-  'okay':       'Hosh',   'hi':         'Ug',
-  'hello':      'Ug',     'goodbye':    "Gug'ye",
-  'thanks':     'Rulg',   'thank':      'Rulg',
-  'know':       'Gruk',   'understand': 'Gruk',
-  'kill':       'Klomp',  'attack':     'Klomp',
-  'hit':        'Klomp',  'trap':       'Krimp',
-  'charge':     'Kuj',    'forward':    'Fus',
-  'back':       'Bak',    'retreat':    'Rut',
-  'hide':       'Hyd',    'defend':     'Defenz',
-  'outside':    'Owtzide','inside':     'Enzide',
-  'blood':      'Grish',  'fire':       'Ghaash',
-  'water':      'Brugh',  'ice':        'Akul',
-  'wind':       'Yula',   'earth':      'Uzg',
-  'land':       'Uzg',    'sand':       'Uzgii',
-  'light':      'Juurz',  'dark':       'Burzum',
-  'darkness':   'Burzum', 'magic':      'Mojo',
-  'power':      'Gothurz','iron':       'Jarn',
-  'wood':       'Wuud',   'boards':     'Wuud',
-  'logs':       'Dru',    'lord':       'Goth',
-  'slave':      'Snaga',  'human':      'Oomie',
-  'orc':        'Urk',    'elf':        'Zan',
-  'dwarf':      'Gazat',  'troll':      'Olog',
-  'ogre':       'Drangu', 'wolf':       'Howlur',
-  'dragon':     'Kulkodar','demon':     'Drok',
-  'quest':      'Qwezt',  'bandage':    'Rag',
-  'horse':      'Fuud',   'mount':      'Fuud',
-  'axe':        'Lusk',   'sword':      'Zult',
-  'bow':        'Olig',   'crossbow':   'Xolig',
-  'dagger':     'Igg',    'spear':      'Kigg',
-  'mace':       'Womp',   'shield':     'Blokur',
-  'arrow':      'Lig',    'potion':     'Mojo Brugh',
-  'reagent':    'Weedz',  'leather':    'Leddurz',
-  'feather':    'Feddurz','wool':       'Wuul',
-  'crafter':    "Mak'r",  'fool':       'Glob',
-  'tree':       'Laus',   'snow':       'Bor',
-  'poison':     'Tokshun','acid':       'Kulz',
-  'mud':        'Balt',   'thunder':    'Zgur',
+  // Pronouns
+  'i': 'Meeb',       'me': 'Meeb',      'my': 'Meebz',   'mine': 'Meebz',
+  'myself': 'Meeb',  'you': 'Lat',      'your': 'Lat',   'yours': 'Latz',
+  'yourself': 'Lat', 'we': 'Us',        'us': 'Us',      'our': 'Us',
+  'ours': 'Usz',     'ourselves': 'Us', 'they': 'Dem',   'them': 'Dem',
+  'their': 'Dem',    'theirs': 'Demz',  'he': 'Heem',    'him': 'Heem',
+  'his': 'Heemz',    'she': 'Hur',      'her': 'Hur',    'hers': 'Hurz',
+  'it': 'it',        'its': 'itz',
+
+  // Articles — drop a/an, soften "the"
+  'a': '',           'an': '',          'the': 'da',
+
+  // Conjunctions / particles
+  'and': 'Agh',      'or': 'ur',        'but': 'butt',   'so': 'so',
+  'because': 'cuz',  'though': 'doe',   'if': 'if',      'until': 'until',
+  'while': 'wile',   'then': 'den',     'also': 'alzo',  'just': 'just',
+  'still': 'stil',   'already': 'alredee',
+
+  // Prepositions
+  'to': 'tu',        'for': 'fur',      'of': 'ov',      'with': 'wif',
+  'from': 'frum',    'in': 'in',        'on': 'on',      'at': 'at',
+  'by': 'by',        'as': 'az',        'into': 'intu',  'upon': 'upun',
+  'about': 'abowt',  'through': 'froo', 'over': 'ovur',  'under': 'undur',
+  'between': 'betweem', 'against': 'aginst', 'before': 'befur', 'after': 'aftur',
+  'without': 'wifout', 'around': 'arownd', 'near': 'neer', 'within': 'wifin',
+
+  // Auxiliaries & modal verbs
+  'is': 'iz',        'am': 'iz',        'are': 'iz',     'was': 'wuz',
+  'were': 'wuz',     'be': 'be',        'been': 'bin',   'being': "bein'",
+  'have': 'haz',     'has': 'haz',      'had': 'had',
+  'do': '',          'does': '',        'did': '',       'done': 'dun',
+  'will': 'wil',     'would': 'wud',    'shall': 'shal', 'should': 'shud',
+  'can': 'kan',      'could': 'kud',    'may': 'may',    'might': 'mite',
+  'must': 'must',    'ought': 'owt',
+
+  // Negation & contractions
+  'not': 'nub',
+  "don't": 'dunt',   "doesn't": 'dunt', "didn't": 'dunt',
+  "isn't": 'ent',    "aren't": 'ent',   "wasn't": 'wunt', "weren't": 'wunt',
+  "can't": 'kant',   "cannot": 'kant',  "won't": 'wunt',  "wouldn't": 'wudnt',
+  "shouldn't": 'shudnt', "couldn't": 'kudnt',
+  "i'm": 'Meeb iz',  "i've": 'Meeb haz', "i'll": 'Meeb wil', "i'd": 'Meeb wud',
+  "you're": 'Lat iz', "you'll": 'Lat wil', "they're": 'Dem iz', "we're": 'Us iz',
+  "he's": 'Heem iz', "she's": 'Hur iz',  "that's": 'dat iz', "it's": 'it iz',
+  "there's": 'der iz', "what's": 'wut iz', "let's": 'Us',
+
+  // Demonstratives
+  'this': 'dis',     'that': 'dat',     'these': 'deez', 'those': 'doze',
+  'here': "'ere",    'there': 'der',    'where': 'wer',
+
+  // Interrogatives
+  'what': 'wut',     'who': 'hoo',      'which': 'wich', 'why': 'wai',
+  'when': 'wen',     'how': 'how',      'whose': 'hooz',
+
+  // Common adjectives
+  'good': 'Hosh',    'bad': 'Nubhosh',  'very': 'bubhosh', 'great': 'bubhosh',
+  'big': 'Beg',      'large': 'Beg',    'huge': 'Beg',   'small': 'lil',
+  'little': 'lil',   'tiny': 'lil lil', 'strong': 'Stronk', 'weak': 'weedy',
+  'stupid': 'Stoopid', 'dumb': 'Stoopid', 'smart': 'kunnin', 'clever': 'kunnin',
+  'dead': 'Flat',    'alive': "libin'", 'old': 'owld',   'new': 'nuw',
+  'fast': 'fast',    'quick': 'kwik',   'slow': 'slo',   'hard': "'ard",
+  'tough': 'tuff',   'dirty': 'durtee', 'filthy': 'Pushdug',
+  'right': 'rite',   'wrong': 'rong',   'true': 'troo',  'ready': 'Redee',
+  'more': 'mor',     'less': 'les',     'many': 'lotz',  'much': 'much',
+  'all': 'al',       'some': 'sum',     'any': 'enee',   'every': 'evree',
+  'other': 'uvvur',  'same': 'saym',    'ok': 'Hosh',    'okay': 'Hosh',
+  'alright': 'Hosh', 'holy': 'holee',  'dark': 'Burzum',
+
+  // Common verbs (exact-match to avoid mangling by phonetics)
+  'give': 'gib',     'gave': 'gib',     'given': 'gibbed',
+  'get': 'git',      'got': 'got',
+  'take': 'Tak',     'took': 'took',
+  'go': 'go',        'went': 'went',    'gone': 'gon',
+  'come': 'Kum',     'came': 'Kum',
+  'see': 'see',      'saw': 'saw',
+  'look': 'look',    'hear': 'heer',    'heard': 'herd',
+  'say': 'blah',     'said': 'blahed',  'speak': 'Blah', 'spoke': 'blahed',
+  'tell': 'blah',    'told': 'blahed',  'talk': 'Blah',
+  'know': 'Gruk',    'knew': 'grukked', 'understand': 'Gruk',
+  'think': 'dink',   'thought': 'dought', 'thinking': "dink'n",
+  'want': 'wunt',    'need': 'needz',
+  'try': 'try',      'use': 'yooz',
+  'find': 'find',    'found': 'found',
+  'make': 'mak',     'made': 'maked',
+  'eat': 'Chom',     'ate': 'chommed',  'eating': "Chom'n",
+  'drink': 'Gulp',   'drank': 'gulped',
+  'run': 'run',      'ran': 'run',
+  'walk': 'wuk',     'walked': 'wukd',
+  'fight': 'Klomp',  'fought': 'klomped',
+  'attack': 'Klomp', 'kill': 'Klomp',  'killing': "Klomp'n",
+  'hit': 'Klomp',    'smash': 'Klomp', 'bash': 'Klomp',
+  'die': 'Flat',     'died': 'flatted', 'dying': "flat'n", 'dies': 'Flat',
+  'hurt': 'urtz',    'hurts': 'urtz',
+  'follow': 'Fus',   'stop': 'Stup',   'wait': 'wayt',
+  'bring': 'brin',   'brought': 'brinned',
+  'leave': 'leev',   'left': 'leevd',
+  'pay': 'gib shiniez fur',
+  'steal': 'snek',   'stole': 'sneked',
+  'hide': 'Hyd',     'hidden': 'hydded',
+  'help': 'elp',     'ask': 'ask',
+  'open': 'opin',    'close': 'kloz',
+  'move': 'mub',     'moved': 'mubd',
+  'show': 'sho',     'put': 'put',
+  'return': 'retrun', 'surrender': 'gib up',
+  'kneel': 'Neel',   'bow': 'neel',
+  'laugh': 'Har har!', 'laughed': 'Har har!',
+  'cry': 'kry',      'pray': 'pray',
+  'curse': 'Skah',   'swear': 'Skah',
+  'join': 'joyn',    'train': 'trayn',
+  'buy': 'buy',      'sell': 'sel',     'trade': 'trade',
+  'have': 'haz',
+
+  // Nouns — content words worth catching exactly
+  'tribute': 'tribyute',
+  'gold': 'shiniez',  'money': 'shiniez', 'coin': 'shiniez', 'coins': 'shiniez',
+  'loot': 'shiniez',  'treasure': 'shiniez',
+  'food': 'Grub',     'meat': 'Flezh',   'fish': 'fishee',  'grub': 'Grub',
+  'mother': 'Momo',   'father': 'Popo',  'brother': 'bruvva', 'sister': 'sissur',
+  'friend': 'frend',  'enemy': 'Enemee', 'foe': 'Enemee',
+  'war': 'Waugh',     'battle': 'Klomp skrap', 'peace': 'peese',
+  'clan': 'Klan',     'tribe': 'Klan',   'guild': 'Klan',
+  'leader': 'Goth',   'chief': 'Goth',   'boss': 'Goth',
+  'warrior': "Klomp'r", 'fighter': "Klomp'r", 'soldier': "Klomp'r",
+  'scout': 'skowt',   'spy': 'sneeky-git',
+  'shaman': 'Mojoka', 'mage': 'Mojoka',  'wizard': 'Mojoka', 'healer': "heel'r",
+  'thief': "snek'r",  'rogue': "snek'r", 'paladin': 'goody-oomie',
+  'guard': 'gard',    'guards': 'gardz',
+  'gate': 'gayt',     'door': 'duur',    'wall': 'wawl',
+  'camp': 'kamp',     'fort': 'Urkala',  'fortress': 'Urkala',
+  'dungeon': 'dunjun', 'cave': 'kayv',
+  'forest': 'wuud-uzg', 'woods': 'wuud-uzg', 'jungle': 'wuud-uzg',
+  'mountain': 'mountun', 'river': 'rivur', 'lake': 'layk',
+  'sky': 'skye',      'sun': 'big juurz', 'moon': 'nite-juurz',
+  'night': 'nite',    'day': 'daye',     'morning': 'mornin', 'evening': 'evenin',
+  'name': 'naym',     'life': 'lyfe',    'death': 'Flat',   'dead': 'Flat',
+  'bone': 'bown',     'flesh': 'Flezh',  'skull': 'skul',
+  'pain': 'Urtz',     'fear': 'feer',    'rage': 'raje',    'anger': 'raje',
+  'power': 'Gothurz', 'strength': 'Stronk',
+  'weapon': 'Weppun', 'armor': 'Armur',  'armour': 'Armur',
+  'map': 'shum-rok',  'word': 'Blah',    'words': 'Blahs',
+  'order': 'ordur',   'orders': 'ordurz', 'plan': 'plan',
+  'reward': 'shiniez', 'price': 'pryz',  'curse': 'Skah',
+  'glory': 'Gloree',  'honor': 'grish-onur', 'honour': 'grish-onur',
+
+  // Existing weapon/element exact-matches to keep reliable
+  'hi': 'Ug',         'hello': 'Ug',     'goodbye': "Gug'ye", 'bye': "Gug'ye",
+  'thanks': 'Rulg',   'thank': 'Rulg',   'yes': 'Yub',       'yeah': 'Yub',
+  'no': 'Nub',        'nope': 'Nub',
+  'blood': 'Grish',   'fire': 'Ghaash',  'water': 'Brugh',   'ice': 'Akul',
+  'wind': 'Yula',     'earth': 'Uzg',    'land': 'Uzg',      'sand': 'Uzgii',
+  'light': 'Juurz',   'darkness': 'Burzum', 'magic': 'Mojo',
+  'iron': 'Jarn',     'wood': 'Wuud',    'boards': 'Wuud',   'logs': 'Dru',
+  'lord': 'Goth',     'slave': 'Snaga',  'human': 'Oomie',   'humans': 'Oomies',
+  'orc': 'Urk',       'orcs': 'Urks',    'elf': 'Zan',       'dwarf': 'Gazat',
+  'troll': 'Olog',    'ogre': 'Drangu',  'wolf': 'Howlur',
+  'dragon': 'Kulkodar', 'demon': 'Drok',
+  'quest': 'Qwezt',   'bandage': 'Rag',  'horse': 'Fuud',    'mount': 'Fuud',
+  'axe': 'Lusk',      'sword': 'Zult',   'crossbow': 'Xolig',
+  'dagger': 'Igg',    'spear': 'Kigg',   'mace': 'Womp',     'shield': 'Blokur',
+  'arrow': 'Lig',     'potion': 'Mojo Brugh', 'reagent': 'Weedz',
+  'leather': 'Leddurz', 'feather': 'Feddurz', 'wool': 'Wuul',
+  "crafter": "Mak'r", 'fool': 'Glob',    'tree': 'Laus',     'snow': 'Bor',
+  'poison': 'Tokshun', 'acid': 'Kulz',   'mud': 'Balt',      'thunder': 'Zgur',
+  'charge': 'Kuj',    'forward': 'Fus',  'back': 'Bak',      'retreat': 'Rut',
+  'defend': 'Defenz', 'outside': 'Owtzide', 'inside': 'Enzide',
+  'trap': 'Krimp',    'path': 'Shum',    'stinking': 'Pushdug',
 };
 Object.assign(engToOrc, OVERRIDES);
+
+// ══════════════════════════════════════════════════════════════════
+//  PHONETIC ORCIFICATION — for words not in any lookup
+// ══════════════════════════════════════════════════════════════════
+
+function orcifyPhonetic(word) {
+  const wasUpper = word[0] === word[0].toUpperCase() && word[0] !== word[0].toLowerCase();
+  let w = word.toLowerCase();
+
+  // Multi-char endings first (longest → shortest)
+  w = w.replace(/ings$/, "'nz");
+  w = w.replace(/tion/g, 'shun');
+  w = w.replace(/ture/g, 'chur');
+  w = w.replace(/ight/g, 'ite');
+  w = w.replace(/ought/g, 'awt');
+  w = w.replace(/aught/g, 'awt');
+  w = w.replace(/ough$/g, 'uff');
+  w = w.replace(/ough/g, 'ow');
+  w = w.replace(/ious/g, 'yus');
+  w = w.replace(/ous$/, 'us');
+  w = w.replace(/our$/, 'ur');
+  w = w.replace(/ance$/, 'anz');
+  w = w.replace(/ence$/, 'enz');
+  w = w.replace(/ment$/, 'munt');
+  w = w.replace(/ness$/, 'nes');
+  w = w.replace(/less$/, 'les');
+  w = w.replace(/ive$/, 'ib');   // active→aktib, massive→massib
+  w = w.replace(/ve$/, 'b');     // love→lub, move→mub, shove→shub
+  w = w.replace(/ing$/, "'n");
+  w = w.replace(/ers$/, 'urz');
+  w = w.replace(/or$/, 'ur');
+  w = w.replace(/ors$/, 'urz');
+  w = w.replace(/er$/, 'ur');
+  w = w.replace(/ly$/, 'lee');
+  w = w.replace(/ies$/, 'eez');
+  w = w.replace(/([b-df-hj-np-tv-z])y$/, '$1ee'); // happy→happee, glory→gloree
+
+  // Consonant cluster simplifications
+  w = w.replace(/ph/g, 'f');
+  w = w.replace(/ck/g, 'k');
+  w = w.replace(/wh/g, 'w');
+  w = w.replace(/kn/g, 'n');
+  w = w.replace(/wr/g, 'r');
+  w = w.replace(/qu/g, 'kw');
+
+  // th → d (start/mid); th → f (end) — classic ork phonetic shift
+  w = w.replace(/th$/, 'f');
+  w = w.replace(/th/g, 'd');
+
+  // -ed ending simplification
+  w = w.replace(/ed$/, 'd');
+
+  // Plural S → Z for flavour (words ending in vowel+s or soft sounds)
+  w = w.replace(/([aeiouy])s$/, '$1z');
+
+  const result = w.trim();
+  if (!result) return word;
+  return wasUpper ? result.charAt(0).toUpperCase() + result.slice(1) : result;
+}
 
 // ══════════════════════════════════════════════════════════════════
 //  TRANSLATION FUNCTIONS
 // ══════════════════════════════════════════════════════════════════
 
 function translateEngToOrc(text) {
-  return text.replace(/\b([a-zA-Z'-]+)\b/g, (match) => {
+  // 1. Apply phrase-level substitutions first
+  let out = text;
+  for (const [pat, rep] of PHRASE_MAP) {
+    out = out.replace(pat, rep);
+  }
+
+  // 2. Word-by-word translation
+  out = out.replace(/\b([a-zA-Z'-]+)\b/g, (match) => {
     const lower = match.toLowerCase();
 
+    // Exact match in overrides (highest priority — covers grammar words)
+    if (Object.prototype.hasOwnProperty.call(OVERRIDES, lower)) {
+      return OVERRIDES[lower]; // may be empty string (articles)
+    }
+
+    // Dict lookup (covers compound entries like "mojo brugh" stem)
     if (engToOrc[lower]) return engToOrc[lower];
 
-    // Try common suffixes — check stem in dictionary
-    const suffixes = [
-      ['ing', "'n"], ['ers', 'urz'], ['er', 'ur'],
-      ['ed', ''], ['s', ''],
+    // Suffix stripping — check if the stem is in the dict
+    const suffixMap = [
+      ['ings', "'nz"], ['ing', "'n"],
+      ['kers', 'kurz'], ['ers', 'urz'], ['er', 'ur'],
+      ['ors', 'urz'],   ['or', 'ur'],
+      ['ied', 'eed'],   ['ies', 'eez'],
+      ['ed', 'd'],      ['s', 'z'],
     ];
-    for (const [suf, rep] of suffixes) {
-      if (lower.endsWith(suf)) {
+    for (const [suf, rep] of suffixMap) {
+      if (lower.endsWith(suf) && lower.length > suf.length + 2) {
         const stem = lower.slice(0, -suf.length);
-        if (stem.length > 2 && engToOrc[stem]) {
-          return engToOrc[stem] + rep;
-        }
+        const base = OVERRIDES[stem] || engToOrc[stem];
+        if (base) return base + rep;
       }
     }
 
-    // Phonetic fallback for longer unknown words
-    if (match.length > 4) {
-      let w = lower;
-      w = w.replace(/tion/g, 'shun');
-      w = w.replace(/ing\b/g, "'n");
-      w = w.replace(/er\b/g, 'ur');
-      w = w.replace(/ph/g, 'f');
-      w = w.replace(/ck/g, 'k');
-      w = w.replace(/wh/g, 'w');
-      w = w.replace(/th/g, 'd');
-      return w;
-    }
-    return match;
+    // Phonetic fallback — orcify the spelling of any unknown word
+    return orcifyPhonetic(match);
   });
+
+  // 3. Clean up artefacts from dropped articles (double spaces)
+  out = out.replace(/\s{2,}/g, ' ').trim();
+
+  return out;
 }
 
 function translateOrcToEng(text) {
